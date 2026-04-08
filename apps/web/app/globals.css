@@ -1,0 +1,132 @@
+@import "tailwindcss";
+@import "@heroui/styles";
+
+/* ===== Sony Wiki — Design Tokens ===== */
+@theme {
+  /* --- Colors --- */
+  --color-primary: #1a73e8;
+  --color-primary-hover: #1557b0;
+  --color-primary-light: #e8f0fe;
+
+  --color-accent: #ff6d00;
+  --color-accent-hover: #e65100;
+
+  --color-success: #0f9d58;
+  --color-warning: #f4b400;
+  --color-error: #db4437;
+
+  --color-surface: #ffffff;
+  --color-surface-alt: #f8f9fa;
+  --color-surface-hover: #f1f3f4;
+
+  --color-border: #dadce0;
+  --color-border-light: #e8eaed;
+
+  --color-text: #202124;
+  --color-text-secondary: #5f6368;
+  --color-text-muted: #9aa0a6;
+  --color-text-inverse: #ffffff;
+
+  --color-sidebar: #f8f9fa;
+  --color-sidebar-active: #e8f0fe;
+
+  /* --- Dark mode colors (overridden below) --- */
+  --color-dark-surface: #1e1e1e;
+  --color-dark-surface-alt: #252525;
+  --color-dark-surface-hover: #2d2d2d;
+  --color-dark-border: #3c3c3c;
+  --color-dark-text: #e8eaed;
+  --color-dark-text-secondary: #9aa0a6;
+  --color-dark-text-muted: #5f6368;
+  --color-dark-sidebar: #1a1a1a;
+  --color-dark-sidebar-active: #1a3a5c;
+  --color-dark-primary-light: #1a3a5c;
+
+  /* --- Typography --- */
+  --font-sans: "Noto Sans", "Noto Sans Vietnamese", system-ui, -apple-system, sans-serif;
+  --font-mono: "Noto Sans Mono", ui-monospace, monospace;
+
+  /* --- Spacing --- */
+  --spacing-sidebar: 260px;
+  --spacing-header: 56px;
+
+  /* --- Border Radius --- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* --- Shadows --- */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+
+  /* --- Transitions --- */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* --- Breakpoints --- */
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+}
+
+/* ===== Dark Mode ===== */
+[color-scheme="dark"] {
+  --color-surface: var(--color-dark-surface);
+  --color-surface-alt: var(--color-dark-surface-alt);
+  --color-surface-hover: var(--color-dark-surface-hover);
+  --color-border: var(--color-dark-border);
+  --color-border-light: var(--color-dark-border);
+  --color-text: var(--color-dark-text);
+  --color-text-secondary: var(--color-dark-text-secondary);
+  --color-text-muted: var(--color-dark-text-muted);
+  --color-sidebar: var(--color-dark-sidebar);
+  --color-sidebar-active: var(--color-dark-sidebar-active);
+  --color-primary-light: var(--color-dark-primary-light);
+}
+
+/* ===== Base Styles ===== */
+html {
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  min-height: 100dvh;
+  line-height: 1.6;
+  transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-text-muted);
+  border-radius: var(--radius-full);
+}
+
+/* ===== Focus Ring ===== */
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ===== Selection ===== */
+::selection {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+}

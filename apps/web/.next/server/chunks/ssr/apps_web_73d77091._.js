@@ -1,0 +1,10 @@
+module.exports=[75229,a=>{"use strict";let b=(0,a.i(11857).registerClientReference)(function(){throw Error("Attempted to call the default export of [project]/apps/web/components/layout/ClientLayout.tsx <module evaluation> from the server, but it's on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.")},"[project]/apps/web/components/layout/ClientLayout.tsx <module evaluation>","default");a.s(["default",0,b])},17806,a=>{"use strict";let b=(0,a.i(11857).registerClientReference)(function(){throw Error("Attempted to call the default export of [project]/apps/web/components/layout/ClientLayout.tsx from the server, but it's on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.")},"[project]/apps/web/components/layout/ClientLayout.tsx","default");a.s(["default",0,b])},43917,a=>{"use strict";a.i(75229);var b=a.i(17806);a.n(b)},28992,a=>{"use strict";var b=a.i(7997),c=a.i(43917);let d=`
+(function() {
+  try {
+    var scheme = localStorage.getItem('color-scheme') || 'light';
+    document.documentElement.setAttribute('color-scheme', scheme);
+  } catch(e) {}
+})();
+`;function e({children:a}){return(0,b.jsxs)("html",{suppressHydrationWarning:!0,lang:"vi",className:"no-touch",children:[(0,b.jsxs)("head",{children:[(0,b.jsx)("link",{rel:"preconnect",href:"https://fonts.googleapis.com"}),(0,b.jsx)("link",{rel:"preconnect",href:"https://fonts.gstatic.com",crossOrigin:"anonymous"}),(0,b.jsx)("link",{href:"https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap",rel:"stylesheet"}),(0,b.jsx)("script",{dangerouslySetInnerHTML:{__html:d}})]}),(0,b.jsx)("body",{children:(0,b.jsx)(c.default,{children:a})})]})}a.s(["default",()=>e,"metadata",0,{title:"Sony Wiki",description:"Sony Wiki — Quản lý Wiki sản phẩm và Color Lab cho Sony"}])}];
+
+//# sourceMappingURL=apps_web_73d77091._.js.map
