@@ -1,4 +1,0 @@
-
-> web@1.0.0 lint
-> NODE_OPTIONS='--require=../../scripts/suppress-baseline-warning.cjs' eslint .
-
