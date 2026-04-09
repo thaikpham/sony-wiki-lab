@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 22, "column": 0}, "map": {"version":3,"sources":["file:///home/thaikpham/Documents/Sony-wiki/sony-wiki/apps/web/app/page.tsx"],"sourcesContent":["import { Metadata } from \"next\";\n\nexport const metadata: Metadata = {\n  title: \"Sony Wiki — Trang chủ\",\n  description: \"Quản lý Wiki sản phẩm và Color Lab cho Sony\",\n};\n\nexport default function HomePage() {\n  return <section aria-label=\"Homepage placeholder\" className=\"min-h-[40vh]\" />;\n}\n"],"names":[],"mappings":";;;;;;;;AAEO,MAAM,WAAqB;IAChC,OAAO;IACP,aAAa;AACf;AAEe,SAAS;IACtB,qBAAO,8OAAC;QAAQ,cAAW;QAAuB,WAAU;;;;;;AAC9D","debugId":null}}]
+}

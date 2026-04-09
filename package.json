@@ -1,0 +1,21 @@
+{
+  "name": "sony-wiki",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "npm@10.9.4",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "setup": "bash ./scripts/setup.sh",
+    "dev": "turbo run dev --filter=web --ui=stream",
+    "build": "turbo run build --filter=web --ui=stream",
+    "start": "turbo run start --filter=web --ui=stream",
+    "lint": "turbo run lint --filter=web --ui=stream"
+  },
+  "devDependencies": {
+    "baseline-browser-mapping": "^2.10.16",
+    "turbo": "^2.4.4"
+  }
+}

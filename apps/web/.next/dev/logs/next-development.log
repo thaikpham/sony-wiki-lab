@@ -1,0 +1,468 @@
+[00:00:01.616] Server  LOG      ✓ Ready in 1110ms
+[00:00:36.776] Server  LOG      ○ Compiling / ...
+[00:00:40.761] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:47:04.566] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:47:08.368] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:47:09.947] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:47:37.080] Server  LOG      ✓ Compiled in 563ms
+[01:47:53.638] Server  LOG      ✓ Compiled in 728ms
+[01:47:54.355] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:48:35.973] Server  LOG      ✓ Compiled in 451ms
+[01:48:47.837] Server  LOG      ✓ Compiled in 337ms
+[01:49:26.092] Server  LOG      ✓ Compiled in 460ms
+[01:49:38.136] Server  LOG      ✓ Compiled in 0ms
+[01:49:38.691] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:49:39.742] Browser WARN    A PressResponder was rendered without a pressable child. Either call the usePress hook, or wrap your DOM node with <Pressable> component.
+[01:50:19.804] Server  LOG      ✓ Compiled in 757ms
+[01:50:28.237] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:50:28.492] Server  LOG      ✓ Compiled in 34ms
+[01:50:28.742] Browser WARN    A PressResponder was rendered without a pressable child. Either call the usePress hook, or wrap your DOM node with <Pressable> component.
+[01:51:27.473] Server  LOG      ✓ Compiled in 0ms
+[01:51:43.392] Server  LOG      ✓ Compiled in 405ms
+[01:57:39.389] Server  LOG      ✓ Compiled in 190ms
+[01:57:47.308] Server  LOG      ✓ Compiled in 487ms
+[01:57:47.997] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:58:19.387] Server  LOG      ✓ Compiled in 184ms
+[01:58:24.883] Server  LOG      ✓ Compiled in 605ms
+[01:59:51.668] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:00:02.003] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:00:06.977] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:00:12.862] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:00:31.827] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:00:34.229] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:11:16.582] Server  ERROR    ⨯ ./apps/web/app/layout.tsx:5:1
+Module not found: Can't resolve '@/lib/utils'
+  3 | import { Metadata } from "next";
+  4 | import { Noto_Sans, Geist } from "next/font/google";
+> 5 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 |
+  7 | const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+  8 |
+
+Import map: aliased to relative './lib/utils' inside of [project]/apps/web
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:11:16.584] Server  ERROR    ⨯ ./apps/web/app/layout.tsx:5:1
+Module not found: Can't resolve '@/lib/utils'
+  3 | import { Metadata } from "next";
+  4 | import { Noto_Sans, Geist } from "next/font/google";
+> 5 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 |
+  7 | const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+  8 |
+
+Import map: aliased to relative './lib/utils' inside of [project]/apps/web
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:11:16.588] Server  ERROR    ⨯ ./apps/web/app/layout.tsx:5:1
+Module not found: Can't resolve '@/lib/utils'
+  3 | import { Metadata } from "next";
+  4 | import { Noto_Sans, Geist } from "next/font/google";
+> 5 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 |
+  7 | const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+  8 |
+
+Import map: aliased to relative './lib/utils' inside of [project]/apps/web
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:11:16.596] Server  ERROR    ⨯ ./apps/web/app/layout.tsx:5:1
+Module not found: Can't resolve '@/lib/utils'
+  3 | import { Metadata } from "next";
+  4 | import { Noto_Sans, Geist } from "next/font/google";
+> 5 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 |
+  7 | const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+  8 |
+
+Import map: aliased to relative './lib/utils' inside of [project]/apps/web
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:11:16.648] Server  ERROR    ⨯ ./apps/web/app/layout.tsx:5:1
+Module not found: Can't resolve '@/lib/utils'
+  3 | import { Metadata } from "next";
+  4 | import { Noto_Sans, Geist } from "next/font/google";
+> 5 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 |
+  7 | const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+  8 |
+
+Import map: aliased to relative './lib/utils' inside of [project]/apps/web
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:11:16.649] Server  ERROR    ⨯ ./apps/web/app/layout.tsx:5:1
+Module not found: Can't resolve '@/lib/utils'
+  3 | import { Metadata } from "next";
+  4 | import { Noto_Sans, Geist } from "next/font/google";
+> 5 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 |
+  7 | const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+  8 |
+
+Import map: aliased to relative './lib/utils' inside of [project]/apps/web
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:11:16.652] Server  ERROR    ⨯ ./apps/web/app/layout.tsx:5:1
+Module not found: Can't resolve '@/lib/utils'
+  3 | import { Metadata } from "next";
+  4 | import { Noto_Sans, Geist } from "next/font/google";
+> 5 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 |
+  7 | const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+  8 |
+
+Import map: aliased to relative './lib/utils' inside of [project]/apps/web
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:11:16.653] Server  ERROR    ⨯ ./apps/web/app/layout.tsx:5:1
+Module not found: Can't resolve '@/lib/utils'
+  3 | import { Metadata } from "next";
+  4 | import { Noto_Sans, Geist } from "next/font/google";
+> 5 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 |
+  7 | const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+  8 |
+
+Import map: aliased to relative './lib/utils' inside of [project]/apps/web
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:11:16.654] Server  ERROR    ⨯ ./apps/web/app/layout.tsx:5:1
+Module not found: Can't resolve '@/lib/utils'
+  3 | import { Metadata } from "next";
+  4 | import { Noto_Sans, Geist } from "next/font/google";
+> 5 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 |
+  7 | const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+  8 |
+
+Import map: aliased to relative './lib/utils' inside of [project]/apps/web
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:11:16.655] Server  ERROR    ⨯ ./apps/web/app/layout.tsx:5:1
+Module not found: Can't resolve '@/lib/utils'
+  3 | import { Metadata } from "next";
+  4 | import { Noto_Sans, Geist } from "next/font/google";
+> 5 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 |
+  7 | const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+  8 |
+
+Import map: aliased to relative './lib/utils' inside of [project]/apps/web
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:11:16.656] Server  ERROR    ⨯ ./apps/web/app/layout.tsx:5:1
+Module not found: Can't resolve '@/lib/utils'
+  3 | import { Metadata } from "next";
+  4 | import { Noto_Sans, Geist } from "next/font/google";
+> 5 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 |
+  7 | const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+  8 |
+
+Import map: aliased to relative './lib/utils' inside of [project]/apps/web
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:11:16.657] Server  ERROR    ⨯ ./apps/web/app/layout.tsx:5:1
+Module not found: Can't resolve '@/lib/utils'
+  3 | import { Metadata } from "next";
+  4 | import { Noto_Sans, Geist } from "next/font/google";
+> 5 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 |
+  7 | const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+  8 |
+
+Import map: aliased to relative './lib/utils' inside of [project]/apps/web
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:11:16.660] Server  ERROR    ⨯ ./apps/web/app/layout.tsx:5:1
+Module not found: Can't resolve '@/lib/utils'
+  3 | import { Metadata } from "next";
+  4 | import { Noto_Sans, Geist } from "next/font/google";
+> 5 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 |
+  7 | const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+  8 |
+
+Import map: aliased to relative './lib/utils' inside of [project]/apps/web
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:11:16.668] Server  ERROR    ⨯ ./apps/web/app/layout.tsx:5:1
+Module not found: Can't resolve '@/lib/utils'
+  3 | import { Metadata } from "next";
+  4 | import { Noto_Sans, Geist } from "next/font/google";
+> 5 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 |
+  7 | const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+  8 |
+
+Import map: aliased to relative './lib/utils' inside of [project]/apps/web
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:11:16.675] Server  ERROR    ⨯ ./apps/web/app/layout.tsx:5:1
+Module not found: Can't resolve '@/lib/utils'
+  3 | import { Metadata } from "next";
+  4 | import { Noto_Sans, Geist } from "next/font/google";
+> 5 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 |
+  7 | const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+  8 |
+
+Import map: aliased to relative './lib/utils' inside of [project]/apps/web
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:11:16.680] Server  ERROR    ⨯ ./apps/web/app/layout.tsx:5:1
+Module not found: Can't resolve '@/lib/utils'
+  3 | import { Metadata } from "next";
+  4 | import { Noto_Sans, Geist } from "next/font/google";
+> 5 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 |
+  7 | const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+  8 |
+
+Import map: aliased to relative './lib/utils' inside of [project]/apps/web
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:11:16.692] Server  ERROR    ⨯ ./apps/web/app/layout.tsx:5:1
+Module not found: Can't resolve '@/lib/utils'
+  3 | import { Metadata } from "next";
+  4 | import { Noto_Sans, Geist } from "next/font/google";
+> 5 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 |
+  7 | const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+  8 |
+
+Import map: aliased to relative './lib/utils' inside of [project]/apps/web
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:11:16.696] Server  ERROR    ⨯ ./apps/web/app/layout.tsx:5:1
+Module not found: Can't resolve '@/lib/utils'
+  3 | import { Metadata } from "next";
+  4 | import { Noto_Sans, Geist } from "next/font/google";
+> 5 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 |
+  7 | const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+  8 |
+
+Import map: aliased to relative './lib/utils' inside of [project]/apps/web
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:11:16.794] Server  LOG      ✓ Compiled in 1128ms
+[02:11:17.743] Browser ERROR   ./apps/web/app/layout.tsx:5:1
+Module not found: Can't resolve '@/lib/utils'
+  3 | import { Metadata } from "next";
+  4 | import { Noto_Sans, Geist } from "next/font/google";
+> 5 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 |
+  7 | const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+  8 |
+
+Import map: aliased to relative './lib/utils' inside of [project]/apps/web
+
+https://nextjs.org/docs/messages/module-not-found
+[02:11:18.936] Server  LOG      ✓ Compiled in 519ms
+[02:11:19.856] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:11:28.687] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:11:31.694] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:12:30.120] Server  LOG      ✓ Compiled in 1049ms
+[02:13:34.061] Server  LOG      ✓ Compiled in 406ms
+[02:13:34.537] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:13:37.947] Server  LOG      ✓ Compiled in 179ms
+[02:14:11.016] Server  LOG      ✓ Compiled in 675ms
+[02:20:11.939] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:20:13.680] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:23:02.576] Server  LOG      ✓ Compiled in 501ms
+[02:23:51.602] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:23:51.805] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <__next_root_layout_boundary__>
+      <SegmentViewNode type="layout" pagePath="/apps/web/...">
+        <SegmentTrieNode>
+        <link>
+        <script>
+        <script>
+        <script>
+        <script>
+        <script>
+        <script>
+        <script>
+        <script>
+        <RootLayout>
+          <html suppressHydrationWarning={true} lang="vi" className="no-touch">
+            <head>
+            <body className="noto_sans_...">
+              <ClientLayout>
+                <div className="min-h-screen">
+                  <TopNavigation>
+                    <header className="sticky top...">
+                      <div className="grid grid-...">
+                        <div>
+                        <GlobalSearch>
+                        <div className="flex items...">
+                          <ThemeToggle>
+                            <ButtonRoot id="theme-toggle" isIconOnly={true} variant="tertiary" onPress={function toggle} ...>
+                              <Button className={function} data-slot="button" isDisabled={undefined} slot={undefined} ...>
+                                <bound $64fa3d84918910a7$var$DOMElement data-slot="button" id="theme-toggle" ...>
+                                  <button
+                                    data-slot="button"
+                                    id="theme-toggle"
+                                    className="button button--icon-only button--md button--tertiary relative h-9 w-9"
+                                    style={undefined}
+                                    data-rac=""
+                                    type="button"
+                                    disabled={undefined}
+                                    form={undefined}
+                                    formAction={undefined}
+                                    formEncType={undefined}
+                                    formMethod={undefined}
+                                    formNoValidate={undefined}
+                                    formTarget={undefined}
+                                    name={undefined}
+                                    value={undefined}
+                                    onFocus={function}
+                                    onBlur={function}
+                                    onKeyDown={function onKeyDown}
+                                    onKeyUp={undefined}
+                                    tabIndex={0}
+                                    onClick={function onClick}
+                                    onPointerDown={function}
+                                    onMouseDown={function}
+                                    onPointerUp={function}
+                                    onPointerEnter={function}
+                                    onPointerLeave={function}
+                                    onDragStart={function}
+                                    data-react-aria-pressable={true}
++                                   aria-label="Chuyển sang chế độ sáng"
+-                                   aria-label="Chuyển sang chế độ tối"
+                                    aria-haspopup={undefined}
+                                    aria-expanded={undefined}
+                                    aria-controls={undefined}
+                                    aria-pressed={undefined}
+                                    aria-current={undefined}
+                                    aria-disabled={undefined}
+                                    aria-labelledby={undefined}
+                                    slot={undefined}
+                                    data-disabled={undefined}
+                                    data-pressed={undefined}
+                                    data-hovered={undefined}
+                                    data-focused={undefined}
+                                    data-pending={undefined}
+                                    data-focus-visible={undefined}
+                                    ref={function}
+                                  >
+                                    <NavIcon type="sun" className={"absolute..."}>
+                                      <svg
++                                       className={"absolute w-[18px] h-[18px] transition-all duration-300\n         ..."}
+-                                       className={"absolute w-[18px] h-[18px] transition-all duration-300\n         ..."}
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        strokeWidth={1.75}
+                                        aria-hidden="true"
+                                      >
+                                    <NavIcon type="moon" className={"absolute..."}>
+                                      <svg
++                                       className={"absolute w-[18px] h-[18px] transition-all duration-300\n         ..."}
+-                                       className={"absolute w-[18px] h-[18px] transition-all duration-300\n         ..."}
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        strokeWidth={1.75}
+                                        aria-hidden="true"
+                                      >
+                          ...
+                      ...
+                  ...
+                ...
+
+[02:24:21.025] Server  LOG      ✓ Compiled in 236ms
+[02:24:26.681] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:25:25.085] Server  LOG      ✓ Compiled in 220ms
+[02:26:04.537] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:27:26.049] Server  LOG      ✓ Compiled in 507ms
+[02:27:37.218] Server  LOG      ✓ Compiled in 144ms
+[02:27:44.368] Server  LOG      ✓ Compiled in 139ms
+[02:27:50.197] Server  LOG      ✓ Compiled in 349ms
