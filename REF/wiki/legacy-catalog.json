@@ -1,0 +1,246 @@
+{
+  "source": "sony-wiki-ref/sony-wiki-dev/src/app/pages/wiki/data/products.ts",
+  "exportedAt": "2026-04-10T00:00:00.000Z",
+  "products": [
+    {
+      "id": "1",
+      "name": "Alpha 7R V",
+      "slug": "alpha-7r-v",
+      "category": "Camera",
+      "price": 98000000,
+      "createdAt": "2024-01-01T00:00:00Z",
+      "buyLink": "https://www.sony.com/en/articles/alpha-7r-v",
+      "thumbnail": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=80&q=80",
+      "specs": [
+        {
+          "group": "Imaging",
+          "specs": [
+            { "label": "Lens Mount", "value": "Sony E" },
+            { "label": "Effective Sensor Resolution", "value": "61 MP (9504 x 6336)" },
+            { "label": "Image Sensor", "value": "35.7 x 23.8 mm Full-Frame CMOS" },
+            { "label": "Image Stabilization", "value": "Sensor-Shift, 5-Axis" }
+          ]
+        },
+        {
+          "group": "Exposure",
+          "specs": [
+            { "label": "ISO (Photo)", "value": "100 - 32000 (Ext: 50 - 102400)" },
+            { "label": "Shutter Speed", "value": "1/8000 - 30 sec, Bulb" }
+          ]
+        },
+        {
+          "group": "Video",
+          "specs": [
+            { "label": "Max Resolution", "value": "8K" },
+            { "label": "Log Profiles", "value": "S-Log2, S-Log3, S-Cinetone, HLG" }
+          ]
+        },
+        {
+          "group": "Physical",
+          "specs": [
+            { "label": "Dimensions (W x H x D)", "value": "131.3 x 96.9 x 82.5 mm" },
+            { "label": "Weight", "value": "723 g" },
+            { "label": "Weather Sealing", "value": "Yes" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "FE 24-70mm F2.8 GM II",
+      "slug": "fe-24-70mm-f2-8-gm-ii",
+      "category": "Lens",
+      "price": 57000000,
+      "createdAt": "2024-01-02T00:00:00Z",
+      "buyLink": "https://www.sony.com/en/articles/sel2470gm2",
+      "thumbnail": "https://images.unsplash.com/photo-1617450365226-9bf28c04e130?w=80&q=80",
+      "specs": [
+        {
+          "group": "Optics",
+          "specs": [
+            { "label": "Focal Length", "value": "24 - 70 mm" },
+            { "label": "Maximum Aperture", "value": "f/2.8" },
+            { "label": "Lens Groups / Elements", "value": "15 Groups / 20 Elements" }
+          ]
+        },
+        {
+          "group": "Physical",
+          "specs": [
+            { "label": "Dimensions (O x L)", "value": "87.8 x 119.9 mm" },
+            { "label": "Weight", "value": "695 g" },
+            { "label": "Weather Sealing", "value": "Yes" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "name": "WH-1000XM5",
+      "slug": "wh-1000xm5",
+      "category": "Headphone",
+      "price": 9900000,
+      "createdAt": "2024-01-03T00:00:00Z",
+      "buyLink": "https://www.sony.com/en/articles/wh-1000xm5",
+      "thumbnail": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=80&q=80",
+      "specs": [
+        {
+          "group": "Audio",
+          "specs": [
+            { "label": "Driver Unit", "value": "30 mm" },
+            { "label": "Noise Cancellation", "value": "Yes - QN1 HD Processor" },
+            { "label": "Codec Support", "value": "SBC, AAC, LDAC" }
+          ]
+        },
+        {
+          "group": "Battery",
+          "specs": [
+            { "label": "Battery Life (ANC On)", "value": "Approx. 30 hours" },
+            { "label": "Quick Charge", "value": "3 min = 3 hours playback" }
+          ]
+        },
+        {
+          "group": "Physical",
+          "specs": [
+            { "label": "Weight", "value": "250 g" },
+            { "label": "Wearing Style", "value": "Over-ear" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "name": "SRS-XG300",
+      "slug": "srs-xg300",
+      "category": "Speaker",
+      "price": 6900000,
+      "createdAt": "2024-01-04T00:00:00Z",
+      "buyLink": "https://www.sony.com/en/articles/srs-xg300",
+      "thumbnail": "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=80&q=80",
+      "specs": [
+        {
+          "group": "Audio",
+          "specs": [
+            { "label": "Speaker Type", "value": "Portable Wireless Speaker" },
+            { "label": "Battery Life", "value": "Approx. 25 hours" },
+            { "label": "Water Resistance", "value": "IP67" }
+          ]
+        },
+        {
+          "group": "Connectivity",
+          "specs": [
+            { "label": "Bluetooth", "value": "5.2" },
+            { "label": "Ports", "value": "USB Type-C / USB-A" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "name": "NP-FZ100 Battery",
+      "slug": "np-fz100-battery",
+      "category": "Phụ kiện",
+      "subcategory": "Pin",
+      "price": 2490000,
+      "createdAt": "2024-01-05T00:00:00Z",
+      "buyLink": "https://www.sony.com/en/articles/np-fz100",
+      "thumbnail": "https://images.unsplash.com/photo-1619637413387-d2b52b6ae2e3?w=80&q=80",
+      "specs": [
+        {
+          "group": "Thông số pin",
+          "specs": [
+            { "label": "Kiểu pin", "value": "Li-ion" },
+            { "label": "Điện áp", "value": "7.2 V" },
+            { "label": "Dung lượng", "value": "2280 mAh / 16.4 Wh" },
+            {
+              "label": "Tương thích",
+              "value": "Alpha 1, Alpha 7 IV, Alpha 7R V, Alpha 7C II, Alpha 6700..."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "name": "SF-M256T CFexpress Type A",
+      "slug": "sf-m256t-cfexpress-type-a",
+      "category": "Phụ kiện",
+      "subcategory": "Thẻ nhớ",
+      "price": 4200000,
+      "createdAt": "2024-01-06T00:00:00Z",
+      "buyLink": "https://www.sony.com/en/articles/sf-m256t",
+      "thumbnail": "https://images.unsplash.com/photo-1603744386634-3a6a0c53b9e3?w=80&q=80",
+      "specs": [
+        {
+          "group": "Hiệu năng",
+          "specs": [
+            { "label": "Dung lượng", "value": "256 GB" },
+            { "label": "Tốc độ đọc (tối đa)", "value": "800 MB/s" },
+            { "label": "Tốc độ ghi (tối đa)", "value": "700 MB/s" },
+            { "label": "Chuẩn thẻ", "value": "CFexpress Type A / SD (dual compatible)" }
+          ]
+        },
+        {
+          "group": "Thông tin",
+          "specs": [{ "label": "Chuẩn bảo hành", "value": "5 năm" }]
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "name": "ECM-B10 Microphone",
+      "slug": "ecm-b10-microphone",
+      "category": "Phụ kiện",
+      "subcategory": "Microphone",
+      "price": 3900000,
+      "createdAt": "2024-01-07T00:00:00Z",
+      "buyLink": "https://www.sony.com/en/articles/ecm-b10",
+      "thumbnail": "https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=80&q=80",
+      "specs": [
+        {
+          "group": "Âm thanh",
+          "specs": [
+            { "label": "Kiểu thu âm", "value": "Cardioid / Omni / Bidirectional" },
+            { "label": "Tần số đáp ứng", "value": "50 Hz - 20,000 Hz" },
+            { "label": "Kết nối", "value": "Multi Interface Shoe (không cần pin)" }
+          ]
+        },
+        {
+          "group": "Vật lý",
+          "specs": [
+            { "label": "Kích thước", "value": "32.8 x 63.2 x 32.8 mm" },
+            { "label": "Khối lượng", "value": "48 g" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "name": "HVL-F60RM2 Flash",
+      "slug": "hvl-f60rm2-flash",
+      "category": "Phụ kiện",
+      "subcategory": "Đèn flash",
+      "price": 11900000,
+      "createdAt": "2024-01-08T00:00:00Z",
+      "buyLink": "https://www.sony.com/en/articles/hvl-f60rm2",
+      "thumbnail": "https://images.unsplash.com/photo-1520390138845-fd2d229dd553?w=80&q=80",
+      "specs": [
+        {
+          "group": "Thông số đèn",
+          "specs": [
+            { "label": "Guide Number", "value": "GN60 (ISO 100, 200mm)" },
+            { "label": "Góc chiếu", "value": "20 - 200 mm" },
+            { "label": "HSS (High Speed Sync)", "value": "Có" },
+            { "label": "Điều khiển không dây", "value": "Radio (2.4 GHz) + Optical" }
+          ]
+        },
+        {
+          "group": "Nguồn điện",
+          "specs": [
+            { "label": "Pin", "value": "4x AA" },
+            { "label": "Thời gian nạp", "value": "Approx. 1.7 giây (NiMH)" }
+          ]
+        }
+      ]
+    }
+  ]
+}

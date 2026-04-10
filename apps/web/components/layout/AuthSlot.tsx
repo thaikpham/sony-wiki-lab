@@ -2,7 +2,7 @@
 
 import { Avatar, Button, Spinner } from "@heroui/react";
 import NavIcon from "./NavIcon";
-import { AuthSlotProps } from "@/types/navigation";
+import type { AuthSlotProps } from "@/types/auth";
 
 export default function AuthSlot({
   state,

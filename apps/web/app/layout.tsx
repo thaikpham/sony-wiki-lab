@@ -1,7 +1,12 @@
 import "./globals.css";
 import ClientLayout from "@/components/layout/ClientLayout";
 import { Metadata } from "next";
-import { Noto_Sans } from "next/font/google";
+import {
+  Inter,
+  JetBrains_Mono,
+  Noto_Sans,
+  Space_Grotesk,
+} from "next/font/google";
 
 export const metadata: Metadata = {
   title: "Sony Wiki",
@@ -24,6 +29,24 @@ const notoSans = Noto_Sans({
   display: "swap",
 });
 
+const inter = Inter({
+  subsets: ["latin", "vietnamese"],
+  display: "swap",
+  variable: "--font-photobooth-body",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-photobooth-headline",
+});
+
+const jetBrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-photobooth-mono",
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -34,7 +57,9 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: setColorSchemeScript }} />
       </head>
-      <body className={notoSans.className}>
+      <body
+        className={`${notoSans.className} ${inter.variable} ${spaceGrotesk.variable} ${jetBrainsMono.variable}`}
+      >
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

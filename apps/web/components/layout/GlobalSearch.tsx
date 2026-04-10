@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Popover, SearchField, Spinner } from "@heroui/react";
-import type { SearchResponse, SearchResultItem } from "@/types/navigation";
+import type { SearchResponse, SearchResultItem } from "@/types/search";
 
 type SearchStatus = "idle" | "loading" | "results" | "empty" | "error";
 

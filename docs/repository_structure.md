@@ -1,113 +1,254 @@
 # Repository Structure
 
-Tài liệu này mô tả cấu trúc thư mục theo logic BMAD: xác định rõ workspace chính, vùng planning và vùng tham chiếu legacy.
+Tài liệu này mô tả repo theo logic BMAD: đâu là source of truth, đâu là runtime thật, đâu là vùng planning, và đâu là legacy reference.
 
-## 1. Source of Truth
+## 1. Source of truth
 
-Thư mục làm việc chính là `sony-wiki/`.
+Source of truth hiện tại của dự án là repo `sony-wiki/`, cụ thể:
 
-Những phần hiện hành của hệ thống:
+- runtime: `apps/web`
+- project knowledge: `docs/` và các file markdown ở root
+- planning artifacts: `_bmad-output`
 
-- `apps/web`: runtime chính đang phát triển
-- `docs`: tài liệu dự án, rollout notes, migration plans
-- `_bmad`: bộ workflow BMAD dùng cho planning và implementation support
-- `codex.md`, `design_tokens.md`, `project_report.md`: tài liệu nền tảng của repo
+Không có runtime nào khác trong repo này ngoài `apps/web`.
 
-## 2. Vai trò từng vùng
+## 2. Top-level map
 
-### `apps/web`
+```text
+sony-wiki/
+├── .github/workflows/          # CI hiện có
+├── _bmad/                      # BMAD framework
+├── _bmad-output/               # Planning + implementation artifacts
+├── apps/
+│   └── web/                    # Next.js runtime chính
+├── docs/                       # BMAD project knowledge
+├── scripts/                    # Setup và utility scripts
+├── README.md
+├── codex.md
+├── design_tokens.md
+├── project_report.md
+├── package.json
+└── turbo.json
+```
 
-Ứng dụng Next.js 16 App Router hiện tại.
+## 3. `apps/web` breakdown
 
-- `app/`: routes, layout, globals và API routes
-- `components/layout/`: app shell, navigation, search, auth shell, theme toggle
-- `components/scroll/`: smooth scroll và scroll-top helpers
-- `lib/supabase/`: client, server và SQL migrations
-- `types/`: shared typings cho navigation/search/auth shell
+```text
+apps/web/
+├── app/
+│   ├── api/
+│   │   ├── search/
+│   │   ├── wiki/
+│   │   └── color-lab/
+│   ├── color-lab/
+│   ├── wiki/
+│   ├── layout.tsx
+│   ├── page.tsx
+│   └── globals.css
+├── components/
+│   ├── color-lab/
+│   ├── layout/
+│   ├── scroll/
+│   ├── ui/
+│   └── wiki/
+├── lib/
+│   ├── color-lab/
+│   ├── supabase/
+│   ├── utils/
+│   └── wiki/
+├── types/
+├── .env.local.example
+├── package.json
+└── tsconfig.json
+```
 
-### `docs`
+## 4. Vai trò từng vùng trong runtime
 
-Nơi lưu tài liệu dự án theo phase và trạng thái rollout.
+### `app/`
 
-- tài liệu định hướng repo
-- kế hoạch migration
-- checklist rollout/hardening
+Chứa:
 
-### `_bmad`
+- route pages
+- root layout
+- global CSS
+- API routes cho search, wiki admin, color-lab admin
 
-Khung làm việc BMAD để:
-
-- phân tích hiện trạng
-- lập kế hoạch theo phase
-- tạo implementation context
-- review và đánh giá readiness
-
-Đây không phải runtime code của sản phẩm. Chỉ sửa khi thực sự muốn tùy biến workflow BMAD của repo.
-
-## 3. Runtime map hiện tại
-
-### Routes
+Routes triển khai thật hiện có:
 
 - `/`
 - `/wiki`
 - `/wiki/[slug]`
 - `/color-lab`
+
+API surface hiện có:
+
 - `/api/search`
+- `/api/wiki/admin/verify`
+- `/api/wiki/admin/catalog`
+- `/api/wiki/categories`
+- `/api/wiki/categories/[id]`
+- `/api/wiki/products`
+- `/api/wiki/products/[id]`
+- `/api/color-lab/admin/catalog`
+- `/api/color-lab/recipes`
+- `/api/color-lab/recipes/[id]`
+- `/api/color-lab/photos`
+- `/api/color-lab/photos/[id]`
 
-### Dữ liệu
+### `components/layout`
 
-- schema wiki: `apps/web/lib/supabase/migrations/20260408_wiki_schema.sql`
-- search index: `apps/web/lib/supabase/migrations/20260409_wiki_search_indexes.sql`
-
-### App shell
+App shell và cross-cutting UI:
 
 - `ClientLayout`
 - `TopNavigation`
 - `GlobalSearch`
 - `ThemeToggle`
 - `AuthSlot`
+- navigation config và icons
 
-## 4. Legacy Reference Zone
+### `components/wiki`
 
-Thư mục `sony-wiki-ref/sony-wiki-dev` là codebase cũ.
+UI riêng cho `Wiki`:
+
+- compare experience + modal
+- filters
+- product card
+- quick view
+- spec groups
+- admin workspace
+- product/category editor modals
+
+### `components/color-lab`
+
+UI riêng cho `Color Lab`:
+
+- recipe rail + URL-synced filter state
+- photo masonry gallery
+- photo lightbox
+- picture profile panel
+- transfer guide card
+- admin workspace
+- recipe/photo editor modals
+
+### `lib/wiki`
+
+Domain logic của `Wiki`:
+
+- query layer
+- mappers
+- contracts
+- search param parsing
+- compare helpers
+- admin auth/client/helpers/schemas
+- presentation formatting
+
+### `lib/color-lab`
+
+Domain logic của `Color Lab`:
+
+- contracts
+- helpers + search param parsing
+- mock seed data + load-state fallbacks
+- mappers
+- queries + cache invalidation
+- admin helpers/schemas
+- storage helpers cho Supabase public preview bucket
+
+### `lib/supabase`
+
+Kết nối dữ liệu:
+
+- `public.ts`: public read client
+- `client.ts`: browser client
+- `server.ts`: SSR/server client
+- `admin.ts`: service-role client
+- `migrations/`: SQL schema và index files
+
+### `types`
+
+Shared contracts cho:
+
+- auth
+- search
+- wiki
+- color-lab
+- supabase database types
+
+## 5. `docs` as project knowledge
+
+`docs/` là lớp tài liệu sống của repo theo tinh thần BMAD.
+
+Nội dung hiện có:
+
+- `index.md`: điểm vào tài liệu
+- `repository_structure.md`: bản đồ repo
+- `phase2_wiki_migration_plan.md`: kế hoạch/hardening cho `Wiki`
+- `phase3_color_lab_migration_plan.md`: trạng thái Phase 3 cho `Color Lab`
+- `navigation_revamp_rollout_checklist.md`: checklist shell/navigation
+
+## 6. `_bmad` vs `_bmad-output`
+
+### `_bmad`
+
+Là framework BMAD:
+
+- skills
+- workflows
+- templates
+- module config
+
+Không phải runtime code.
+
+### `_bmad-output`
+
+Là artifact của chính repo này:
+
+- `planning-artifacts/`: current state, architecture decisions, epics, readiness review
+- `implementation-artifacts/`: hardening progress và implementation notes
+
+Nếu current state đổi, đây là nơi cần đồng bộ cùng với docs gốc.
+
+## 7. Legacy reference zone
+
+Legacy repo được repo này tham chiếu là:
+
+- `../sony-wiki-ref/sony-wiki-dev`
 
 Vai trò:
 
-- tham chiếu feature đã từng tồn tại
-- đối chiếu data model hoặc UX flow cũ
-- làm nguồn đầu vào cho migration `wiki` và `color-lab`
+- đọc business rules cũ
+- đối chiếu data shape
+- lấy migration context cho `Wiki` và `Color Lab`
 
-Không nên:
+Không dùng để:
 
-- commit feature mới vào đây
-- dùng cấu trúc cũ làm chuẩn cho app mới
-- copy nguyên xi layout/runtime cũ sang `apps/web`
+- phát triển feature mới
+- sửa runtime chính
+- quyết định cấu trúc kiến trúc mới
 
-## 5. Migration logic
+## 8. Decision rules
 
-Thứ tự ưu tiên hiện tại:
+Khi có mâu thuẫn giữa các nguồn:
 
-1. Hoàn thiện `Wiki`
-2. Sau đó mới sang `Color Lab`
+1. ưu tiên code đang chạy trong `apps/web`
+2. ưu tiên docs mới trong repo này hơn ghi chú cũ
+3. chỉ dùng legacy repo như bằng chứng tham chiếu
+4. nếu cần giữ legacy behavior, phải ghi lại trong docs hoặc `_bmad-output`
 
-Chu trình migrate nên là:
+## 9. Update protocol
 
-1. đọc flow cũ trong `sony-wiki-ref/sony-wiki-dev`
-2. bóc tách business rules, data shape, admin use cases
-3. ánh xạ vào kiến trúc mới trong `apps/web`
-4. cập nhật docs phase và artifact cần thiết
-5. mới triển khai runtime
+Nếu thay đổi những thứ sau:
 
-## 6. Quy ước ra quyết định
+- route surface
+- API surface
+- schema/migration
+- app shell
+- theme/token behavior
+- phase/status của `Wiki` hoặc `Color Lab`
 
-Khi có mâu thuẫn giữa codebase mới và codebase cũ:
+thì tối thiểu cần cập nhật:
 
-- ưu tiên `sony-wiki/`
-- dùng `sony-wiki-ref/` chỉ như bằng chứng tham khảo
-- nếu cần giữ lại hành vi cũ, phải ghi rõ trong docs migration hoặc project report
-
-## 7. BMAD note cho lần coding sau
-
-- Đọc hiện trạng runtime trước khi viết code.
-- Không sửa `_bmad` chỉ để phản ánh website; cập nhật docs dự án trước.
-- Nếu cấu trúc route, shell hoặc phase thay đổi, đồng bộ lại `README.md`, `codex.md` và `project_report.md`.
+- `README.md`
+- `project_report.md`
+- file phù hợp trong `docs/`
+- artifact phù hợp trong `_bmad-output`

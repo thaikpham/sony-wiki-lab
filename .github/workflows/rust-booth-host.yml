@@ -1,0 +1,46 @@
+name: Rust Booth Host CI
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "apps/booth-host/**"
+      - ".github/workflows/rust-booth-host.yml"
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "apps/booth-host/**"
+      - ".github/workflows/rust-booth-host.yml"
+  workflow_dispatch:
+
+jobs:
+  booth-host:
+    name: Booth Host Rust Checks
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/booth-host
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            apps/booth-host -> target
+
+      - name: Show Rust toolchain
+        run: |
+          rustc --version
+          cargo --version
+
+      - name: Cargo build
+        run: cargo build --all-targets
+
+      - name: Cargo test
+        run: cargo test -- --nocapture

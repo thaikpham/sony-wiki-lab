@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-container": "#1b1b1d",
+                    "surface-tint": "#5f5e60",
+                    "surface-container": "#eeeeee",
+                    "surface-container-low": "#f3f3f3",
+                    "surface-variant": "#e2e2e2",
+                    "primary-fixed": "#e4e2e4",
+                    "on-primary-fixed": "#1b1b1d",
+                    "tertiary": "#000000",
+                    "tertiary-container": "#1a1b1f",
+                    "on-error-container": "#93000a",
+                    "primary-fixed-dim": "#c8c6c8",
+                    "on-tertiary-fixed": "#1a1b1f",
+                    "on-secondary-fixed-variant": "#474648",
+                    "on-primary": "#ffffff",
+                    "on-primary-container": "#858386",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#f9f9f9",
+                    "on-primary-fixed-variant": "#474649",
+                    "on-error": "#ffffff",
+                    "outline-variant": "#c7c6ca",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-container": "#838388",
+                    "inverse-surface": "#2f3131",
+                    "error-container": "#ffdad6",
+                    "surface-dim": "#dadada",
+                    "tertiary-fixed-dim": "#c6c6cb",
+                    "surface": "#f9f9f9",
+                    "inverse-on-surface": "#f0f1f1",
+                    "outline": "#77767b",
+                    "tertiary-fixed": "#e3e2e7",
+                    "secondary": "#5e5e60",
+                    "secondary-fixed-dim": "#c8c6c8",
+                    "inverse-primary": "#c8c6c8",
+                    "secondary-container": "#e1dfe1",
+                    "secondary-fixed": "#e4e2e4",
+                    "on-surface": "#1a1c1c",
+                    "surface-container-high": "#e8e8e8",
+                    "surface-container-highest": "#e2e2e2",
+                    "on-tertiary": "#ffffff",
+                    "on-background": "#1a1c1c",
+                    "on-tertiary-fixed-variant": "#45474b",
+                    "on-secondary-fixed": "#1b1b1d",
+                    "on-surface-variant": "#46464a",
+                    "on-secondary-container": "#636264",
+                    "background": "#f9f9f9",
+                    "primary": "#000000",
+                    "error": "#ba1a1a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary selection:text-on-primary overflow-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#f9f9f9] dark:bg-[#171719] flex justify-between items-center px-8 h-16 w-full font-['Space_Grotesk'] font-bold tracking-tight">
+<div class="text-xl font-bold tracking-tighter text-[#1a1c1c] dark:text-[#f3f3f3]">STUDIO.PRO</div>
+<nav class="hidden md:flex items-center gap-8 h-full">
+<a class="text-[#636264] dark:text-[#a1a1a1] hover:text-[#000000] transition-colors duration-200" href="#">Capture</a>
+<a class="text-[#1a1c1c] dark:text-[#ffffff] border-b-2 border-[#000000] dark:border-[#ffffff] pb-1" href="#">Gallery</a>
+<a class="text-[#636264] dark:text-[#a1a1a1] hover:text-[#000000] transition-colors duration-200" href="#">Review</a>
+<a class="text-[#636264] dark:text-[#a1a1a1] hover:text-[#000000] transition-colors duration-200" href="#">Export</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-[#e8e8e8] dark:hover:bg-[#2a2a2c] transition-colors duration-200 rounded-full">
+<span class="material-symbols-outlined text-[#1a1c1c] dark:text-[#f3f3f3]">cloud_done</span>
+</button>
+<button class="p-2 hover:bg-[#e8e8e8] dark:hover:bg-[#2a2a2c] transition-colors duration-200 rounded-full">
+<span class="material-symbols-outlined text-[#1a1c1c] dark:text-[#f3f3f3]">settings</span>
+</button>
+</div>
+</header>
+<!-- SideNavBar (Left) -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 border-r border-[#e8e8e8]/20 bg-[#f3f3f3] dark:bg-[#171719] flex flex-col gap-2 p-4 font-['Inter'] text-sm uppercase tracking-widest z-40">
+<div class="mb-6 px-2">
+<h3 class="text-on-surface font-bold text-xs">SESSION_0824</h3>
+<p class="text-on-secondary-container text-[10px] tracking-widest mt-1 opacity-60">Enterprise ID: 992-B</p>
+</div>
+<div class="space-y-1">
+<button class="w-full flex items-center gap-3 p-3 bg-[#ffffff] dark:bg-[#1b1b1d] text-[#000000] dark:text-[#ffffff] font-semibold transition-all ease-in-out duration-300">
+<span class="material-symbols-outlined text-base">photo_library</span>
+<span>Assets</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 mr-80 pt-16 min-h-screen bg-surface overflow-y-auto h-screen no-scrollbar">
+<!-- Toolbar / Action Bar -->
+<div class="h-14 px-6 flex items-center justify-between bg-surface-container-low border-b border-outline-variant/5 sticky top-16 z-30">
+<div class="flex items-center gap-4">
+<span class="text-xs font-bold tracking-widest text-on-surface-variant">128 OBJECTS DETECTED</span>
+<div class="h-4 w-px bg-outline-variant/20"></div>
+<button class="flex items-center gap-2 px-3 py-1 bg-surface-container-highest text-on-surface text-[11px] font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-sm">select_all</span>
+                    Select All
+                </button>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[11px] text-on-secondary-container uppercase tracking-tighter">Sort by</span>
+<button class="material-symbols-outlined text-lg">swap_vert</button>
+<button class="material-symbols-outlined text-lg ml-4">view_module</button>
+<button class="material-symbols-outlined text-lg opacity-40">view_list</button>
+</div>
+</div>
+<!-- Grid Container -->
+<div class="p-6">
+<div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+<!-- Gallery Item 1 (Selected) -->
+<div class="relative group aspect-[3/4] bg-surface-container-low overflow-hidden border-2 border-primary">
+<img alt="Studio Portrait" class="w-full h-full object-cover" data-alt="high-end editorial fashion photography of a model with sharp lighting and deep shadows in a minimalist studio environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjc3oUDMbnpNMYUgkTlmBqsAgmvUY1H6vN3EE6_N4auNxF2WmeozxAkYuq_c-RFl1DZOx1hM0xmvMC-MHxiux-PtMcYDUYK75NXV-HLRAXJ46tPB2Rf-VzN0u_Mwap1uNsEG48JsDI0pU6FX6rho8lqb8G32RDmzhohYR78UneAd5CAp8gZCE0v8-k0RFsBuOknKnmvNzu6vvtJQ7WSp5gaxubM1wUU4tfsn38LbptdRHzq56Q8z048J_rDnGNgF-U0-rz6ZOgSX_6"/>
+<div class="absolute inset-0 bg-primary/5"></div>
+<div class="absolute top-2 left-2 flex gap-1">
+<div class="bg-primary text-on-primary text-[9px] px-1.5 py-0.5 font-mono">SELECTED</div>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/60 to-transparent">
+<div class="flex justify-between items-end">
+<div>
+<p class="text-white font-mono text-[10px] leading-none">FRM_0824_001</p>
+<p class="text-white/60 font-mono text-[8px] mt-1">12:04:32.08 PST</p>
+</div>
+<span class="material-symbols-outlined text-white text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+</div>
+<!-- Gallery Item 2 -->
+<div class="relative group aspect-[3/4] bg-surface-container-low overflow-hidden hover:ring-1 ring-primary/30 transition-all">
+<img alt="Studio Action" class="w-full h-full object-cover grayscale" data-alt="sharp professional photography of a high-speed splash or object movement in a controlled studio setting with clean white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-kVZOuL-fGvFVWmOfH02ZnOdrh9Pn-iC70eHv_Xg_X5rHimwwx9_yQ8_pBLpsY5wdAG2Ec36b7LqxcMBnwYqADtUiopin1_RZtlqwwLMZUD2wDzYYnlmFstrcpYFdq0IW8tuAS9_xCNCO6MtiUCiiGzqG6fK8QNnfTzcAEKwYbIEVGhEbaSRmC4I1qrHAe44koHSKoQDvhV3HG-rgyg9wwUqCLVilAT99hKpBo6CGk-GNfYY_NawJ38FQW2-YDRP6nLyGgiCh86iQ"/>
+<div class="absolute bottom-0 left-0 right-0 p-3 bg-surface-container-lowest/90 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity">
+<p class="text-on-surface font-mono text-[10px]">FRM_0824_002</p>
+<p class="text-on-secondary-container font-mono text-[8px]">12:05:11.42 PST</p>
+</div>
+</div>
+<!-- Gallery Item 3 -->
+<div class="relative group aspect-[3/4] bg-surface-container-low overflow-hidden hover:ring-1 ring-primary/30 transition-all">
+<img alt="Studio Detail" class="w-full h-full object-cover" data-alt="close-up artistic portrait photography emphasizing texture and micro-details under soft studio key lighting and fill shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ4qVrhPvL8iAY-HsfNh1vpZBAsQy02ekNvCqvidga9yFwd23z_kaMA_95J7-knaaI2OdqPsVFJr7xuRkdKWoIXQOXWGP-y6k6csaYRRlNNTveRXWaI9AGdfcSdcJJLG0G6McwNUTIjjJVwkIXGkm7gxYHTi6jsapx2pICcBn08fbBG9RHrwRi-uqEJCF1Sqifyfvi5FNGWKZCGB6SJkoev0eMjkGEP-DswasBHN3pVr9CnwrRU3tOpIby5mWPn8aXJYeK3wz5xltY"/>
+<div class="absolute bottom-0 left-0 right-0 p-3 bg-surface-container-lowest/90 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity">
+<p class="text-on-surface font-mono text-[10px]">FRM_0824_003</p>
+<p class="text-on-secondary-container font-mono text-[8px]">12:05:45.91 PST</p>
+</div>
+</div>
+<!-- High Density Grid Additions -->
+<div class="relative group aspect-[3/4] bg-surface-container-low overflow-hidden border border-outline-variant/10">
+<img alt="Modern Architecture Studio" class="w-full h-full object-cover grayscale" data-alt="architectural interior shot of a modern minimalist studio with large glass windows and geometric shadows during afternoon sunlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwOSGWazVvoByNrUT2wZjEm_Ueb8XZ5j_0Eih5_7Onn_zS2BhnzmUjeyawdoKATDy-t9V7QjEN860-N574hKKt89Cct5ln1wR9wMSNvO73LtjUKmZ2sBsTTHVNT6dYXWmNaIR_EPaNxTwy-_R6TFwmIkWZMTYlp7OOrTBtwYzIXHZxGYDw8yVplSgbX9Gu2sc5h2hrGjgWdXAJOj2C3yXbwveS664LyqewkeLpWsQavCU3ufVXwO8KGjYR1quWA_zjOHdGmcU5e5uV"/>
+</div>
+<div class="relative group aspect-[3/4] bg-surface-container-low overflow-hidden border border-outline-variant/10">
+<img alt="Studio Lighting Gear" class="w-full h-full object-cover" data-alt="technical shot of professional studio photography lighting equipment and reflectors against a neutral gray background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDr4c3KnIXOR5o4eHNYoGORKLkkI3U5JR7g1S00e8o8ZD93rMzJaPPEnCk4T2sS3s9YO5JWTvidyCkdbMF-4u0g_xOulk-p_DjfZuOhihtAAGtNdTuteDumsyGYm9YRv-B9bG158Jdcv5DPjFTjRQGA4y4Day8k0WJTUSSk7n1jIlOu4ZFL4uv7g7XYvSuUp2LTxpZr8YMuV9GZbOMwSsIN8MxvVaIwwo13EjopLdkZEkB9j8Oodnz11nrUqWbdhXAuTDdivNGCpEUo"/>
+</div>
+<div class="relative group aspect-[3/4] bg-surface-container-low overflow-hidden border border-outline-variant/10">
+<img alt="Color Palette" class="w-full h-full object-cover grayscale" data-alt="abstract composition of industrial photography showing high-contrast metal textures and geometric patterns" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzXA4FnQlMREuok2YY8MwBkOfJRWUF0OJEAQ1jDSpnJnmPL8CpWstpapr1ZcicMZ6CBj15rkyfDuxJMZapqJQl68WkAEKMk94btGDCp6g01Qvna9gZpCbdKchZ5LW60m6Exsllxj96CvSBfldInj8tWz_a53oM0IBqdpeeCFwGwgNw6UjyMn6HK-ClQpTMXIYicfoDQNCr9lRnnoiKO7GNHRWrlkSp-jfhVYF5P_6wEKL9aNZg_6D6nTzofo8qwbevE_R8u2m9eKrC"/>
+</div>
+</div>
+</div>
+</main>
+<!-- Right Sidebar / Share & Export Hub -->
+<aside class="fixed right-0 top-16 h-[calc(100vh-64px)] w-80 bg-surface-container-low border-l border-outline-variant/10 p-6 overflow-y-auto no-scrollbar z-40">
+<div class="flex flex-col h-full">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-xs font-bold tracking-[0.2em] text-on-surface uppercase">Share &amp; Export</h2>
+<button class="material-symbols-outlined text-lg">close</button>
+</div>
+<!-- Selection Preview -->
+<div class="aspect-square bg-white shadow-sm mb-6 p-2 relative group">
+<img alt="Selected Preview" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAt95MZuLEQ1HzEYfsl1Z8sOTKAjh1sCVJQ_w9r8N9H8ibuAVET-EoYSGiLy9VA0Bp9LfdH9v1dOG2slb62uUWwpNmA0tUXX9WwmK29E4zNyYZMGHw7W9IHgAykW_vv7Qwts68wissf5mJ31qLeMey5XL9w-FI1cUjpKWcUEy6OhtzKd_eaZZSuG7rh96Nt5Y9iLrLfF_IwVf_mZPtSkSkNJecfbs0he6WMMBk_cyStsmuJYMHCD0SkQQKMI5L6wAF_5oFQ6Ie0B0-"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="text-white text-[10px] font-bold tracking-widest uppercase">Preview Selection</span>
+</div>
+</div>
+<div class="space-y-6">
+<!-- QR Generation -->
+<section>
+<h3 class="text-[10px] font-bold text-on-secondary-container mb-3 tracking-widest uppercase">Quick Access</h3>
+<button class="w-full bg-primary text-on-primary py-4 px-4 border border-primary hover:bg-transparent hover:text-primary transition-all flex flex-col items-center justify-center gap-2">
+<span class="material-symbols-outlined text-2xl">qr_code_2</span>
+<span class="text-[10px] font-bold tracking-widest uppercase">Generate QR Code</span>
+</button>
+</section>
+<!-- Email Send -->
+<section>
+<h3 class="text-[10px] font-bold text-on-secondary-container mb-3 tracking-widest uppercase">Email Transfer</h3>
+<div class="space-y-2">
+<input class="w-full bg-surface-container-lowest border border-outline-variant/20 text-[10px] p-3 focus:ring-1 focus:ring-primary focus:border-primary outline-none tracking-widest uppercase" placeholder="ENTER RECIPIENT EMAIL" type="email"/>
+<button class="w-full bg-surface-container-highest text-on-surface py-3 px-4 text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-sm">send</span>
+                            Send Selection
+                        </button>
+</div>
+</section>
+<!-- Cloud Integration -->
+<section>
+<h3 class="text-[10px] font-bold text-on-secondary-container mb-3 tracking-widest uppercase">Cloud Integration</h3>
+<button class="w-full bg-white border border-outline-variant/30 text-on-surface py-3 px-4 text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-3 hover:shadow-md transition-shadow">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M12.5,14.5L10,10L15.5,10L18,14.5L12.5,14.5M7,15.5L8.5,18.5L20.5,18.5L22,15.5L7,15.5M9.5,14.5L3.5,14.5L6.5,9.5L12.5,9.5L9.5,14.5M8,10L10.5,5.5L16.5,5.5L14,10L8,10Z"></path></svg>
+                        Upload to Google Drive
+                    </button>
+</section>
+<!-- Share Link -->
+<section>
+<h3 class="text-[10px] font-bold text-on-secondary-container mb-3 tracking-widest uppercase">Direct Link</h3>
+<div class="flex items-center bg-surface-container-lowest border border-outline-variant/20 p-1">
+<span class="flex-1 text-[9px] font-mono px-2 truncate text-on-secondary-container">studio.pro/share/824_v1...</span>
+<button class="bg-primary text-on-primary text-[9px] font-bold py-2 px-3 tracking-widest uppercase hover:bg-surface-tint transition-colors">
+                            Copy URL
+                        </button>
+</div>
+</section>
+<!-- Footer Actions -->
+<div class="mt-auto pt-8 pb-4">
+<button class="w-full text-error text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 py-2 opacity-60 hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-sm">delete</span>
+                        Clear Selection
+                    </button>
+</div>
+</div>
+</div>
+</aside>
+</body></html>

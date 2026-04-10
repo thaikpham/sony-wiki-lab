@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>STUDIO_PRO | Enterprise Capture</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-surface-variant": "#46464a",
+                    "on-tertiary-fixed-variant": "#45474b",
+                    "on-primary-fixed-variant": "#474649",
+                    "inverse-surface": "#2f3131",
+                    "surface-tint": "#5f5e60",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed-variant": "#474648",
+                    "on-primary-fixed": "#1b1b1d",
+                    "on-background": "#1a1c1c",
+                    "primary-fixed": "#e4e2e4",
+                    "on-secondary-fixed": "#1b1b1d",
+                    "surface-variant": "#e2e2e2",
+                    "secondary-container": "#e1dfe1",
+                    "outline-variant": "#c7c6ca",
+                    "on-tertiary-container": "#838388",
+                    "tertiary": "#000000",
+                    "surface-dim": "#dadada",
+                    "primary-container": "#1b1b1d",
+                    "on-secondary": "#ffffff",
+                    "surface": "#f9f9f9",
+                    "error-container": "#ffdad6",
+                    "surface-container-highest": "#e2e2e2",
+                    "outline": "#77767b",
+                    "surface-container": "#eeeeee",
+                    "on-primary-container": "#858386",
+                    "inverse-primary": "#c8c6c8",
+                    "tertiary-fixed-dim": "#c6c6cb",
+                    "background": "#f9f9f9",
+                    "primary-fixed-dim": "#c8c6c8",
+                    "on-surface": "#1a1c1c",
+                    "surface-container-low": "#f3f3f3",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed": "#e4e2e4",
+                    "surface-bright": "#f9f9f9",
+                    "inverse-on-surface": "#f0f1f1",
+                    "tertiary-fixed": "#e3e2e7",
+                    "on-error-container": "#93000a",
+                    "surface-container-high": "#e8e8e8",
+                    "secondary": "#5e5e60",
+                    "primary": "#000000",
+                    "secondary-fixed-dim": "#c8c6c8",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-container": "#636264",
+                    "on-tertiary-fixed": "#1a1b1f",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#1a1b1f",
+                    "error": "#ba1a1a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+        }
+        .viewfinder-overlay {
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 25%, rgba(0,0,0,0) 75%, rgba(0,0,0,0.6) 100%);
+        }
+        .shutter-glow {
+            box-shadow: 0 0 0 10px rgba(0,0,0,0.03);
+        }
+        .aspect-3-2 {
+            aspect-ratio: 3 / 2;
+        }
+        .filmstrip-scroll::-webkit-scrollbar {
+            height: 3px;
+        }
+        .filmstrip-scroll::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+        }
+        .filmstrip-scroll::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+        }
+        .mono-border { border-color: rgba(0,0,0,0.08); }
+        .text-micro { font-size: 8px; line-height: 1; }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary selection:text-on-primary antialiased">
+<!-- TopAppBar Shell -->
+<header class="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-12 h-16 w-full bg-white/80 backdrop-blur-xl border-b mono-border">
+<div class="flex items-center gap-4">
+<div class="text-xl font-bold tracking-[0.2em] text-primary font-headline">STUDIO_PRO</div>
+<div class="px-2 py-0.5 border border-primary/20 rounded text-[9px] font-bold tracking-widest text-primary/60">V2.4.1_ENT</div>
+</div>
+<nav class="hidden md:flex gap-12">
+<a class="relative text-primary font-headline tracking-widest text-xs font-bold py-5 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-primary" href="#">CAPTURE</a>
+<a class="text-on-secondary-container hover:text-primary transition-colors duration-200 font-headline tracking-widest text-xs font-bold py-5" href="#">GALLERY</a>
+<a class="text-on-secondary-container hover:text-primary transition-colors duration-200 font-headline tracking-widest text-xs font-bold py-5" href="#">REVIEW</a>
+<a class="text-on-secondary-container hover:text-primary transition-colors duration-200 font-headline tracking-widest text-xs font-bold py-5" href="#">EXPORT</a>
+</nav>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5 px-3 py-1.5 bg-surface-container rounded-md">
+<span class="material-symbols-outlined text-[18px]">account_circle</span>
+<span class="text-[10px] font-bold tracking-widest font-headline">ID: PRO_77</span>
+</div>
+<button class="p-2 hover:bg-surface-container transition-colors rounded-md">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-16 min-h-screen flex flex-col bg-[#F5F5F5]">
+<div class="flex-grow flex flex-col items-center justify-center px-12 py-10 w-full max-w-[1800px] mx-auto gap-10">
+<!-- Central Workspace -->
+<div class="w-full grid grid-cols-[200px_1fr_200px] gap-10 items-center">
+<!-- Left: Module Sidebar (Control & Sync) -->
+<div class="flex flex-col gap-6">
+<!-- Control Module -->
+<div class="bg-white border mono-border rounded-xl p-5 shadow-sm">
+<div class="flex items-center justify-between mb-4 border-b mono-border pb-2">
+<span class="text-[10px] font-black tracking-[0.15em] font-headline uppercase">Control</span>
+<span class="material-symbols-outlined text-sm">tune</span>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<button class="flex flex-col items-center justify-center p-3 border mono-border rounded-lg hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined text-lg mb-1">flare</span>
+<span class="text-micro font-bold tracking-widest uppercase">Strobe</span>
+</button>
+<button class="flex flex-col items-center justify-center p-3 border mono-border rounded-lg hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined text-lg mb-1">gradient</span>
+<span class="text-micro font-bold tracking-widest uppercase">Filter</span>
+</button>
+</div>
+</div>
+<!-- Sync Module -->
+<div class="bg-white border mono-border rounded-xl p-5 shadow-sm">
+<div class="flex items-center justify-between mb-4 border-b mono-border pb-2">
+<span class="text-[10px] font-black tracking-[0.15em] font-headline uppercase">Sync Hub</span>
+<span class="material-symbols-outlined text-sm">sync</span>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg flex items-center justify-center mb-3">
+<div class="relative group cursor-pointer">
+<span class="material-symbols-outlined text-primary/20 text-5xl">qr_code_2</span>
+<div class="absolute inset-0 border border-primary/10 rounded"></div>
+</div>
+</div>
+<div class="text-center mb-4">
+<div class="text-[9px] font-bold tracking-widest text-on-surface-variant opacity-60">SCAN TO LINK APP</div>
+</div>
+<button class="w-full flex items-center justify-center gap-2 py-2.5 bg-primary text-white rounded-lg hover:bg-zinc-800 transition-colors">
+<span class="material-symbols-outlined text-[16px]">share</span>
+<span class="text-[9px] font-bold tracking-[0.2em] font-headline uppercase">Remote Link</span>
+</button>
+</div>
+</div>
+<!-- Center: Precision Viewfinder -->
+<div class="relative w-full max-w-[1000px] aspect-3-2 bg-black rounded-2xl overflow-hidden shadow-2xl group border-[6px] border-white">
+<img alt="professional photography studio setup" class="w-full h-full object-cover opacity-90 transition-all duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOd9FYM_dJDuqOoDGetPljFFZ62ozE6_IUG2F-_7lE_eBwOPM8MhlL8s2IGFtSRe_RsCTDWGBOOlXy6t5av9xYg74MEOJdigLMU7oukXvaAGIfYfa5q0gITkLtTFcN_-8So0elQ80tgjYaeWJsutUF1gxoPthL5-JGSDPJfzcb1N2B4r75CtRrfcCq8fmkaFuknbB0HoFUWsBnaTObOyKTS_VIkKd4gPRh8NqJNK8LSZgm6xqQ7o80Ek0DGBunhMKw4c45j-0yAQzW"/>
+<!-- Focus Architecture -->
+<div class="absolute inset-0 pointer-events-none">
+<!-- Rules of Thirds -->
+<div class="absolute inset-0 grid grid-cols-3 grid-rows-3">
+<div class="border-r border-b border-white/10"></div>
+<div class="border-r border-b border-white/10"></div>
+<div class="border-b border-white/10"></div>
+<div class="border-r border-b border-white/10"></div>
+<div class="border-r border-b border-white/10"></div>
+<div class="border-b border-white/10"></div>
+<div class="border-r border-white/10"></div>
+<div class="border-r border-white/10"></div>
+<div></div>
+</div>
+<!-- Detailed Corners -->
+<div class="absolute top-6 left-6 w-8 h-8 border-t-2 border-l-2 border-white/40"></div>
+<div class="absolute top-6 right-6 w-8 h-8 border-t-2 border-r-2 border-white/40"></div>
+<div class="absolute bottom-6 left-6 w-8 h-8 border-b-2 border-l-2 border-white/40"></div>
+<div class="absolute bottom-6 right-6 w-8 h-8 border-b-2 border-r-2 border-white/40"></div>
+<!-- AF Point -->
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-16 h-16 border border-white/20 rounded-sm relative">
+<div class="absolute inset-x-0 top-0 h-1 bg-white/60 w-1/4 mx-auto"></div>
+<div class="absolute inset-x-0 bottom-0 h-1 bg-white/60 w-1/4 mx-auto"></div>
+<div class="absolute inset-y-0 left-0 w-1 bg-white/60 h-1/4 my-auto"></div>
+<div class="absolute inset-y-0 right-0 w-1 bg-white/60 h-1/4 my-auto"></div>
+</div>
+</div>
+</div>
+<!-- Heads Up Display -->
+<div class="absolute inset-0 viewfinder-overlay p-10 flex flex-col justify-between pointer-events-none">
+<div class="flex justify-between items-start">
+<div class="flex gap-12 font-headline">
+<div class="flex flex-col gap-0.5">
+<span class="text-[8px] tracking-widest text-white/50 uppercase font-black">ISO Sensitivity</span>
+<span class="text-sm font-bold text-white tracking-widest">400</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<span class="text-[8px] tracking-widest text-white/50 uppercase font-black">Shutter Speed</span>
+<span class="text-sm font-bold text-white tracking-widest">1/125S</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<span class="text-[8px] tracking-widest text-white/50 uppercase font-black">Aperture</span>
+<span class="text-sm font-bold text-white tracking-widest">ƒ/2.8</span>
+</div>
+</div>
+<div class="flex items-center gap-3 bg-red-600/90 text-white px-3 py-1 rounded-sm">
+<div class="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+<span class="text-[10px] tracking-[0.2em] font-black uppercase">Recording</span>
+</div>
+</div>
+<div class="flex justify-between items-end">
+<div class="flex gap-6 items-center">
+<div class="px-2 py-1 border border-white/30 rounded text-[9px] text-white font-bold tracking-[0.2em] uppercase">ProRes 422</div>
+<div class="px-2 py-1 border border-white/30 rounded text-[9px] text-white font-bold tracking-[0.2em] uppercase">5.2K @ 24FPS</div>
+</div>
+<div class="flex gap-3 pointer-events-auto">
+<button class="w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/20 backdrop-blur-md rounded border border-white/20 transition-all">
+<span class="material-symbols-outlined text-white">grid_3x3</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/20 backdrop-blur-md rounded border border-white/20 transition-all text-white font-headline font-bold text-xs">
+                                    RAW
+                                </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Capture Hub -->
+<div class="flex flex-col items-center gap-12">
+<div class="flex flex-col gap-4 w-full">
+<button class="flex items-center gap-3 px-4 py-3 bg-white border mono-border rounded-xl hover:bg-surface-container-low transition-all group w-full">
+<span class="material-symbols-outlined group-hover:rotate-180 transition-transform duration-500">flip_camera_ios</span>
+<div class="text-left">
+<div class="text-[9px] font-black tracking-widest font-headline uppercase">Flip View</div>
+<div class="text-[8px] opacity-40 uppercase font-bold">Primary Lens</div>
+</div>
+</button>
+<button class="flex items-center gap-3 px-4 py-3 bg-white border mono-border rounded-xl hover:bg-surface-container-low transition-all group w-full">
+<span class="material-symbols-outlined">timer</span>
+<div class="text-left">
+<div class="text-[9px] font-black tracking-widest font-headline uppercase">Interval</div>
+<div class="text-[8px] opacity-40 uppercase font-bold">OFF</div>
+</div>
+</button>
+</div>
+<div class="flex flex-col items-center gap-6">
+<button class="relative group active:scale-95 transition-all duration-300">
+<div class="w-36 h-36 rounded-full border-4 border-black/5 flex items-center justify-center p-3 bg-white shadow-xl">
+<div class="w-full h-full bg-primary rounded-full shutter-glow flex items-center justify-center shadow-lg group-hover:bg-zinc-800 transition-colors">
+<span class="material-symbols-outlined text-white text-5xl">photo_camera</span>
+</div>
+</div>
+</button>
+<div class="text-center">
+<div class="font-headline text-[11px] tracking-[0.4em] font-black text-primary uppercase">Execute Capture</div>
+<div class="text-[8px] font-bold text-on-surface-variant opacity-40 mt-1 uppercase tracking-widest">Session.R5_Sync</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Area: Asset Management Filmstrip -->
+<div class="w-full bg-white border mono-border rounded-2xl p-6 shadow-sm mb-4">
+<div class="flex justify-between items-center mb-6">
+<div class="flex items-center gap-6">
+<div>
+<span class="font-headline text-[12px] tracking-[0.3em] font-black text-on-surface block uppercase">Roll_ID: SESSION_012_HQ</span>
+<span class="font-label text-[9px] tracking-widest text-on-surface-variant opacity-50 uppercase mt-1 block">8 Professional Assets Indexing...</span>
+</div>
+<div class="h-8 w-[1px] bg-black/10"></div>
+<div class="flex gap-4">
+<div class="flex flex-col">
+<span class="text-micro font-bold opacity-40 uppercase tracking-widest">Metadata</span>
+<span class="text-[10px] font-bold">EXIF_ON</span>
+</div>
+<div class="flex flex-col">
+<span class="text-micro font-bold opacity-40 uppercase tracking-widest">Session Type</span>
+<span class="text-[10px] font-bold">TETHERED</span>
+</div>
+</div>
+</div>
+<a class="px-5 py-2 border mono-border rounded-full font-headline text-[10px] tracking-widest font-bold text-primary hover:bg-primary hover:text-white transition-all flex items-center gap-3" href="#">
+                        OPEN ASSET BROWSER <span class="material-symbols-outlined text-sm">open_in_new</span>
+</a>
+</div>
+<div class="flex gap-4 overflow-x-auto pb-4 filmstrip-scroll snap-x">
+<!-- Filmstrip Item 1 -->
+<div class="flex-none w-64 aspect-3-2 relative rounded-lg overflow-hidden group cursor-pointer bg-surface-container snap-start border mono-border">
+<img alt="recent capture" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD60PLPXohqqSBvT3O5XuZdm1ceQXqhmuVFnp6IVD7VCyVq96v5zWbgG7pc7O4MLBptA0W2BcMjbJu8j_F45m6RAz_9w-PQQecF8X6H5RICgMFU-VYQA_MQS5Cd9nwe_5A_axbLJK3SXXODeEOLBFn95YtdQg0WaXvPLjCp2AEri2LwSKcMiGgLDzm2ylewc1_fGkxqQWS4y28NWPEOKclWWR6yS-ewVUBfjOIrJSawRITUDyat3gB3wPsCbw-uQNjauFuCFmW3QtK-"/>
+<div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center backdrop-blur-sm">
+<span class="text-[10px] font-bold text-white tracking-widest mb-2 uppercase">IMG_842.RAW</span>
+<div class="flex gap-2">
+<button class="p-1.5 bg-white/20 rounded-md hover:bg-white/40"><span class="material-symbols-outlined text-white text-lg">visibility</span></button>
+<button class="p-1.5 bg-white/20 rounded-md hover:bg-white/40"><span class="material-symbols-outlined text-white text-lg">star</span></button>
+</div>
+</div>
+</div>
+<!-- Filmstrip Item 2 -->
+<div class="flex-none w-64 aspect-3-2 relative rounded-lg overflow-hidden group cursor-pointer bg-surface-container snap-start border mono-border">
+<img alt="recent capture" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXoPmJJ3PaZyHpxgpMeeGyqAaMokZ6sxpJDh-3IuHGv14-Laa9Dy0o_ZRjJ_Hez2vq2VySZVm8A1DESPfwRum-5Lvn2qfGg7c7bnfkp6A0TTs3XkBcxyp_xVh1UET4HB-8CTzzh9huhskMNOprWRa_KHkmAy6WF0SlhpYTXCcZDRtdwIauqr5dRE1F2MfQL-PmYBtT_QzuV2ZYuWN2g4ybhY43mxmzHWlGVKAw8yAOtsJtc-c4YVWMJMewXCP163tFv4hlZ8saizaq"/>
+<div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center backdrop-blur-sm">
+<span class="text-[10px] font-bold text-white tracking-widest mb-2 uppercase">IMG_843.RAW</span>
+<div class="flex gap-2">
+<button class="p-1.5 bg-white/20 rounded-md hover:bg-white/40"><span class="material-symbols-outlined text-white text-lg">visibility</span></button>
+<button class="p-1.5 bg-white/20 rounded-md hover:bg-white/40"><span class="material-symbols-outlined text-white text-lg">star</span></button>
+</div>
+</div>
+</div>
+<!-- Filmstrip Item 3 -->
+<div class="flex-none w-64 aspect-3-2 relative rounded-lg overflow-hidden group cursor-pointer bg-surface-container snap-start border mono-border">
+<img alt="recent capture" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD60PLPXohqqSBvT3O5XuZdm1ceQXqhmuVFnp6IVD7VCyVq96v5zWbgG7pc7O4MLBptA0W2BcMjbJu8j_F45m6RAz_9w-PQQecF8X6H5RICgMFU-VYQA_MQS5Cd9nwe_5A_axbLJK3SXXODeEOLBFn95YtdQg0WaXvPLjCp2AEri2LwSKcMiGgLDzm2ylewc1_fGkxqQWS4y28NWPEOKclWWR6yS-ewVUBfjOIrJSawRITUDyat3gB3wPsCbw-uQNjauFuCFmW3QtK-"/>
+<div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center backdrop-blur-sm">
+<span class="text-[10px] font-bold text-white tracking-widest mb-2 uppercase">IMG_844.RAW</span>
+<div class="flex gap-2">
+<button class="p-1.5 bg-white/20 rounded-md hover:bg-white/40"><span class="material-symbols-outlined text-white text-lg">visibility</span></button>
+<button class="p-1.5 bg-white/20 rounded-md hover:bg-white/40"><span class="material-symbols-outlined text-white text-lg">star</span></button>
+</div>
+</div>
+</div>
+<!-- Filmstrip Item 4 -->
+<div class="flex-none w-64 aspect-3-2 relative rounded-lg overflow-hidden group cursor-pointer bg-surface-container snap-start border mono-border">
+<img alt="recent capture" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXoPmJJ3PaZyHpxgpMeeGyqAaMokZ6sxpJDh-3IuHGv14-Laa9Dy0o_ZRjJ_Hez2vq2VySZVm8A1DESPfwRum-5Lvn2qfGg7c7bnfkp6A0TTs3XkBcxyp_xVh1UET4HB-8CTzzh9huhskMNOprWRa_KHkmAy6WF0SlhpYTXCcZDRtdwIauqr5dRE1F2MfQL-PmYBtT_QzuV2ZYuWN2g4ybhY43mxmzHWlGVKAw8yAOtsJtc-c4YVWMJMewXCP163tFv4hlZ8saizaq"/>
+<div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center backdrop-blur-sm">
+<span class="text-[10px] font-bold text-white tracking-widest mb-2 uppercase">IMG_845.RAW</span>
+<div class="flex gap-2">
+<button class="p-1.5 bg-white/20 rounded-md hover:bg-white/40"><span class="material-symbols-outlined text-white text-lg">visibility</span></button>
+<button class="p-1.5 bg-white/20 rounded-md hover:bg-white/40"><span class="material-symbols-outlined text-white text-lg">star</span></button>
+</div>
+</div>
+</div>
+<!-- Quick Snap Placeholder -->
+<div class="flex-none w-64 aspect-3-2 relative rounded-lg overflow-hidden group cursor-pointer bg-surface-container-low snap-start border-2 border-dashed mono-border flex items-center justify-center hover:bg-white transition-colors">
+<div class="flex flex-col items-center gap-2 text-outline-variant">
+<span class="material-symbols-outlined text-2xl">add_photo_alternate</span>
+<span class="text-micro font-black tracking-[0.2em] font-headline uppercase">Quick Append</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

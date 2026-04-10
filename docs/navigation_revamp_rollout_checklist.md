@@ -1,73 +1,70 @@
 # Navigation Revamp Rollout Checklist
 
-Checklist này được cập nhật theo hiện trạng navigation đang có trong `apps/web`.
+Checklist này phản ánh trạng thái navigation/shell thật trong `apps/web` sau khi runtime đã có `Wiki`, `Color Lab` và `Photobooth` hoạt động.
 
-## 1. Hiện trạng rollout
+## 1. Current rollout status
 
-Navigation revamp về cơ bản đã được áp dụng trong runtime hiện tại:
+Navigation revamp không còn là kế hoạch tương lai. Nó đã trở thành shell mặc định của ứng dụng:
 
-- `ClientLayout` đã dùng top-navigation-only
-- `TopNavigation`, `GlobalSearch`, `ThemeToggle`, `AuthSlot` đã tồn tại
-- route `GET /api/search` đã hoạt động trong build
+- `ClientLayout` dùng top-navigation-only
+- `TopNavigation` render điều hướng `Wiki`, `Color Lab`, `Livestream` và `Photobooth`
+- `GlobalSearch` hoạt động với `/api/search`
+- `ThemeToggle` đã hydration-safe
+- `AuthSlot` đã có đủ state UI, nhưng auth integration thật chưa nối
 
-Checklist dưới đây được chuyển sang dạng hardening/maintenance thay vì rollout mới hoàn toàn.
+## 2. Foundation checklist
 
-## 2. Verification
+- [x] `ClientLayout` là app shell mặc định
+- [x] `TopNavigation` được sticky ở đầu trang
+- [x] shell không còn phụ thuộc sidebar/drawer legacy
+- [x] `globals.css` có semantic token layer dùng chung cho shell
+- [x] `ThemeToggle` đồng bộ `localStorage`, `color-scheme` và `.dark`
 
-### Foundation
+## 3. Search checklist
 
-- [x] Semantic tokens đã có trong `apps/web/app/globals.css`
-- [x] Alias `--color-*` còn hoạt động cho phần UI đang migrate
-- [x] Focus ring dùng `--ring`
+- [x] route `GET /api/search?q=&limit=` đã tồn tại
+- [x] kết quả search hỗ trợ `product` và `category`
+- [x] keyboard support có `ArrowUp`, `ArrowDown`, `Enter`, `Escape`
+- [x] kết quả điều hướng đúng về `/wiki` hoặc `/wiki/[slug]`
+- [x] có state `loading`, `results`, `empty`, `error`
 
-### Shell
+## 4. Navigation destinations
 
-- [x] `ClientLayout` dùng kiến trúc top-navigation-only
-- [x] Không còn phụ thuộc `AppHeader` hoặc `Sidebar` legacy trong runtime mới
-- [x] `AuthSlot` hỗ trợ đủ state `guest/loading/authenticated`
+- [x] `/` có landing content
+- [x] `/wiki` mở được từ top nav
+- [x] `/color-lab` mở được từ top nav
+- [x] `/photobooth` mở được từ top nav
+- [x] search có thể đưa người dùng sang `Wiki`
 
-### Search
+## 5. Auth and state handling
 
-- [x] Route `GET /api/search?q=&limit=` đã tồn tại
-- [x] Keyboard support: `ArrowUp`, `ArrowDown`, `Enter`, `Escape`
-- [x] Result item điều hướng về `/wiki` hoặc `/wiki/[slug]`
-- [x] Search có state `loading`, `results`, `empty`, `error`
-
-### Theme
-
-- [x] Dark/light mode giữ theo semantic tokens
-- [x] Theme persistence sau reload được xử lý qua `localStorage`
-
-### Build confidence
-
-- [x] `npm run lint` pass
-- [x] `npm run build` pass
-
-## 3. Open items còn lại
-
-- [ ] `/wiki` vẫn đang là placeholder cho listing thực
-- [ ] mobile search interaction chưa được mô tả bằng e2e test
+- [x] `AuthSlot` hỗ trợ state `guest`
+- [x] `AuthSlot` hỗ trợ state `loading`
+- [x] `AuthSlot` hỗ trợ state `authenticated`
 - [ ] auth shell chưa nối với flow đăng nhập thật
-- [ ] chưa có smoke test tự động cho điều hướng và search
 
-## 4. Lưu ý cập nhật
+## 6. Quality and verification
 
-Checklist cũ có mục về mobile drawer. Mục đó không còn phù hợp vì app shell hiện tại là top-navigation-only, không dùng drawer làm navigation chuẩn.
+- [ ] browser smoke test tự động cho shell/navigation chưa có
+- [ ] mobile search interaction chưa có e2e coverage
+- [ ] cần xác nhận định kỳ rằng `lint`, `typecheck`, `build`, `test` vẫn xanh sau các thay đổi shell lớn
 
-## 5. Revert plan
+## 7. Regression watch list
 
-Nếu navigation hiện tại gây sự cố nghiêm trọng:
+Những điểm nên kiểm tra lại sau mỗi thay đổi liên quan shell:
 
-1. Revert nhóm thay đổi gần nhất trong shell/navigation.
-2. Tạm vô hiệu hóa trigger điều hướng từ search nếu API/search payload lỗi.
-3. Giữ lại migration SQL vì chúng không làm hỏng runtime navigation.
+- [ ] top nav vẫn highlight đúng route active
+- [ ] `GlobalSearch` không bị stuck popover khi đổi route
+- [ ] `ThemeToggle` giữ trạng thái sau reload
+- [ ] layout không vỡ ở mobile và desktop
+- [ ] `AuthSlot` không gây layout shift ở breakpoint nhỏ
 
-## 6. Smoke test sau mỗi thay đổi navigation
+## 8. Revert plan
 
-- [ ] `/wiki` vào được từ top nav
-- [ ] `/color-lab` vào được từ top nav
-- [ ] search trả điều hướng đúng theo loại kết quả
-- [ ] theme toggle vẫn giữ trạng thái sau reload
-- [ ] layout không vỡ trên mobile và desktop
+Nếu navigation/shell gây regression nghiêm trọng:
 
-*Cập nhật: 09/04/2026*
+1. revert nhóm thay đổi gần nhất trong `components/layout/*`
+2. nếu cần, vô hiệu hóa phần trigger search trước khi chạm vào route surface
+3. không rollback schema/migrations vì chúng không phải nguyên nhân trực tiếp của navigation regression
+
+*Cập nhật: 10/04/2026*

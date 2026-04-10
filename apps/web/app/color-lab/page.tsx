@@ -1,35 +1,55 @@
 import { Metadata } from "next";
+import ColorLabAdminWorkspace from "@/components/color-lab/ColorLabAdminWorkspace";
+import ColorLabExperience from "@/components/color-lab/ColorLabExperience";
+import { parseColorLabSearchParams } from "@/lib/color-lab/search-params";
+import { withTimeout } from "@/lib/utils/with-timeout";
+import {
+  getCachedColorLabPageData,
+  getDegradedColorLabPageData,
+  getFallbackColorLabPageData,
+  PUBLIC_COLOR_LAB_DATA_TIMEOUT_MS,
+} from "@/lib/color-lab/queries";
 
 export const metadata: Metadata = {
   title: "Color Lab — Sony Wiki",
-  description: "Quản lý công thức màu, ảnh mẫu và recipe cho máy ảnh Sony",
+  description: "Recipe library, preview photos và settings panel cho Color Lab của Sony",
 };
 
-export default function ColorLabPage() {
-  return (
-    <div className="max-w-5xl mx-auto py-8">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-bold text-[var(--color-text)]">Color Lab</h1>
-          <p className="text-sm text-[var(--color-text-secondary)] mt-1">
-            Quản lý công thức màu và ảnh mẫu cho máy ảnh Sony
-          </p>
-        </div>
-      </div>
+export default async function ColorLabPage({
+  searchParams,
+}: PageProps<"/color-lab">) {
+  const parsedSearchParams = parseColorLabSearchParams(await searchParams);
+  const experienceKey = [
+    parsedSearchParams.q ?? "",
+    parsedSearchParams.cameraLine ?? "",
+    parsedSearchParams.profile ?? "",
+  ].join("::");
+  let colorLabData = getFallbackColorLabPageData();
 
-      {/* Placeholder content */}
-      <div className="flex flex-col items-center justify-center py-20 rounded-xl
-                      border-2 border-dashed border-[var(--color-border)]">
-        <svg className="w-12 h-12 text-[var(--color-text-muted)] mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
-          <path strokeLinecap="round" strokeLinejoin="round"
-            d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z" />
-        </svg>
-        <p className="text-sm text-[var(--color-text-muted)] mb-1 font-medium">
-          Color Lab sẽ được triển khai ở Phase 3
-        </p>
-        <p className="text-xs text-[var(--color-text-muted)]">
-          Bao gồm: recipes CRUD, sample photos, admin management
-        </p>
+  try {
+    colorLabData = await withTimeout(
+      getCachedColorLabPageData(),
+      PUBLIC_COLOR_LAB_DATA_TIMEOUT_MS,
+      "Color Lab public data timed out."
+    );
+  } catch {
+    colorLabData = getDegradedColorLabPageData();
+  }
+
+  return (
+    <div className="space-y-6 py-8">
+      <ColorLabExperience
+        key={experienceKey}
+        initialCameraLine={parsedSearchParams.cameraLine}
+        initialProfile={parsedSearchParams.profile}
+        initialQuery={parsedSearchParams.q}
+        loadState={colorLabData.loadState}
+        recipes={colorLabData.recipes}
+        photos={colorLabData.photos}
+        source={colorLabData.source}
+      />
+      <div>
+        <ColorLabAdminWorkspace />
       </div>
     </div>
   );

@@ -1,35 +1,49 @@
 # Sony Wiki — Design Tokens Specification
 
-Tài liệu này định nghĩa token runtime chính thức cho `sony-wiki/apps/web`. Source of truth hiện tại là [apps/web/app/globals.css](/home/thaikpham/Documents/Sony-wiki/sony-wiki/apps/web/app/globals.css).
+Tài liệu này mô tả token runtime thực tế đang được dùng trong `apps/web`. Source of truth là [apps/web/app/globals.css](/home/thaikpham/Documents/Sony-wiki/sony-wiki/apps/web/app/globals.css), không phải theme URL hay ảnh chụp giao diện cũ.
 
-Theme nền hiện tại đã được áp từ shadcn registry của TweakCN:
+## 1. Token authority
 
-- `https://tweakcn.com/r/themes/cmnr4nnqp000304kv7jxh4ag3`
+Runtime hiện dùng ba lớp token chồng lên nhau trong `globals.css`:
 
-## 1. Nguyên tắc nền
+1. semantic layer khai báo qua `@theme`
+2. shadcn/HeroUI bridge qua `@theme inline`
+3. giá trị hiệu lực tại `:root` và `.dark`
 
-- Component mới bắt buộc ưu tiên semantic tokens như `--background`, `--foreground`, `--surface`, `--primary`, `--border`, `--ring`.
-- Không hardcode màu, radius hoặc shadow mới trong component nếu chưa được chuẩn hóa.
-- Alias `--color-*` đang được giữ lại để tương thích với phần UI còn trong giai đoạn migrate.
-- Dark mode được điều khiển ở mức root bằng cả `color-scheme` và class `.dark`, vì shadcn theme cần `.dark` còn app cũ đang dùng `color-scheme`.
-- Theme toggle hiện dùng render hydration-safe để tránh mismatch giữa SSR và client.
+Quy tắc thực tế:
 
-## 2. Semantic Color Tokens
+- component nên đọc semantic token như `--surface`, `--foreground`, `--border`, `--ring`
+- palette hiệu lực cuối cùng được quyết định bởi `:root` và `.dark`
+- URL theme từ TweakCN chỉ còn giá trị tham khảo lịch sử; không còn là source of truth
 
-### Surface & Text
+## 2. Hướng visual hiện tại
+
+Theme runtime hiện tại không còn là palette xanh-vàng như lớp tài liệu cũ từng mô tả. Hướng visual hiệu lực đang là:
+
+- nền trung tính, độ tương phản cao
+- surface tách lớp bằng `card`, `secondary`, `surface-alt`
+- primary và accent thiên về monochrome/high-contrast
+- semantic feedback giữ riêng cho `success`, `warning`, `danger`
+
+Nói ngắn gọn: repo đang dùng một token bridge trung tính để bảo đảm HeroUI, shadcn và custom components cùng đọc được một bộ biến thống nhất.
+
+## 3. Semantic token groups
+
+### Surface & text
 
 - `--background`
 - `--foreground`
 - `--surface`
 - `--surface-alt`
 - `--surface-hover`
-- `--border`
-- `--border-subtle`
+- `--surface-secondary`
+- `--surface-tertiary`
+- `--overlay`
 - `--muted-foreground`
 - `--text-secondary`
 - `--text-inverse`
 
-### Brand & Feedback
+### Action & state
 
 - `--primary`
 - `--primary-hover`
@@ -38,85 +52,72 @@ Theme nền hiện tại đã được áp từ shadcn registry của TweakCN:
 - `--accent`
 - `--accent-hover`
 - `--accent-foreground`
-- `--success`
-- `--warning`
-- `--danger`
 - `--ring`
+- `--focus`
 
-Lưu ý hiện tại:
+### Feedback
 
-- `--background`, `--foreground`, `--primary`, `--accent`, `--border`, `--ring` đang lấy visual direction từ TweakCN theme.
-- `--surface`, `--surface-alt`, `--surface-hover`, `--text-secondary`, `--border-subtle` là lớp semantic được map lại để phần app cũ dùng tiếp được.
+- `--success`
+- `--success-foreground`
+- `--warning`
+- `--warning-foreground`
+- `--danger`
+- `--danger-foreground`
 
-### Dark mode aliases
+### Field/system
 
-Trong `globals.css` hiện có thêm lớp token dark:
+- `--field-background`
+- `--field-foreground`
+- `--field-placeholder`
+- `--field-border`
+- `--segment`
+- `--separator`
+- `--default`
 
-- `--dark-background`
-- `--dark-foreground`
-- `--dark-surface`
-- `--dark-surface-alt`
-- `--dark-surface-hover`
-- `--dark-border`
-- `--dark-border-subtle`
-- `--dark-muted-foreground`
-- `--dark-text-secondary`
-- `--dark-ring`
+## 4. Shadcn and HeroUI bridge
 
-Khi `html[color-scheme="dark"]` được set, semantic token sẽ được remap trực tiếp sang các giá trị này.
+`globals.css` đang giữ cầu nối để cả hai lớp UI cùng dùng được:
 
-## 3. Backward-Compatible Alias Layer
+- shadcn/UI variables: `--card`, `--popover`, `--secondary`, `--muted`, `--destructive`, `--sidebar-*`
+- semantic aliases cho app runtime: `--surface`, `--surface-alt`, `--text-secondary`, `--border-subtle`
+- backward-compatible aliases: `--color-*`
 
-Hiện runtime vẫn duy trì alias để tránh gãy màn:
+Điều này cho phép:
 
-- `--color-primary -> --primary`
-- `--color-primary-hover -> --primary-hover`
-- `--color-primary-light -> --primary-soft`
-- `--color-surface -> --surface`
-- `--color-surface-alt -> --surface-alt`
-- `--color-surface-hover -> --surface-hover`
-- `--color-border -> --border`
-- `--color-border-light -> --border-subtle`
-- `--color-text -> --foreground`
-- `--color-text-secondary -> --text-secondary`
-- `--color-text-muted -> --muted-foreground`
-- `--color-text-inverse -> --text-inverse`
-- `--color-sidebar -> --surface`
-- `--color-sidebar-active -> --primary-soft`
-- `--spacing-header -> --layout-header-height`
+- HeroUI components đọc palette chung
+- custom Tailwind classes trong app shell vẫn dùng token semantic
+- phần UI cũ chưa migrate hết tiếp tục chạy qua alias layer
 
-Quy tắc:
+## 5. Typography, layout, radius, shadow
 
-- UI mới: dùng semantic token trực tiếp.
-- UI cũ hoặc placeholder hiện tại: alias còn chấp nhận được, nhưng khi chạm vào nên remap dần.
+### Typography
 
-## 4. Layout, Typography, Radius, Shadow, Motion
+- `--font-sans`: `Noto Sans`
+- `--font-serif`: `Noto Serif`
+- `--font-mono`: `Red Hat Mono`
 
 ### Layout
 
 - `--layout-header-height`: `56px`
 
-### Typography
-
-- `--font-sans`: `Noto Sans`, `ui-sans-serif`, `sans-serif`, `system-ui`
-- `--font-mono`: `Red Hat Mono`, `ui-monospace`, `monospace`
-- `--font-serif`: `Noto Serif`, `ui-serif`, `serif`
-
 ### Radius
 
-- `--radius-sm`: `4px`
-- `--radius-md`: `8px`
-- `--radius-lg`: `12px`
-- `--radius-xl`: `16px`
-- `--radius-full`: `9999px`
+- `--radius-sm`
+- `--radius-md`
+- `--radius-lg`
+- `--radius-xl`
+- `--radius-full`
+- shadcn bridge còn sinh thêm `--radius-2xl`, `--radius-3xl`, `--radius-4xl`
 
 ### Shadow
 
 - `--shadow-sm`
 - `--shadow-md`
 - `--shadow-lg`
+- `--shadow-xl`
+- `--shadow-2xl`
 
-### Transition
+### Motion
 
 - `--transition-fast`
 - `--transition-base`
@@ -131,33 +132,55 @@ Quy tắc:
 - `--breakpoint-xl`
 - `--breakpoint-2xl`
 
-## 5. HeroUI v3 Usage Rules
+## 6. Theme runtime behavior
 
-1. Dùng `@heroui/react` + `@heroui/styles` làm UI layer mặc định.
-2. Không dùng provider/pattern v2 như `@heroui/system`.
-3. Ưu tiên `onPress` cho action trên HeroUI components.
-4. Ưu tiên semantic variant thay vì style theo raw color.
-5. Nếu thêm shadcn component mới, phải giữ nó dùng cùng token trong `globals.css` thay vì tự tạo palette khác.
+Theme mode được điều khiển đồng thời bằng:
 
-## 6. Hiện trạng áp dụng trong web
+- `localStorage("color-scheme")`
+- thuộc tính `html[color-scheme="light|dark"]`
+- class `.dark` trên `document.documentElement`
 
-- `TopNavigation`, `ThemeToggle`, `GlobalSearch`, `/wiki`, `/color-lab` và `/wiki/[slug]` đều đang dựa vào lớp token này.
-- Theme persistence dùng `localStorage("color-scheme")`, set vào `document.documentElement`, đồng thời sync class `.dark`.
-- Riêng vùng top navigation đang có thêm contrast override ở mức component để giữ độ đọc tốt khi HeroUI variant mặc định chưa khớp hoàn toàn với theme registry hiện tại.
-- Placeholder pages vẫn còn dùng một phần alias `--color-*`, nên alias layer chưa thể bỏ ngay.
-- Repo đã có:
-  - `apps/web/components.json`
-  - `apps/web/components/ui/button.tsx`
-  - `apps/web/lib/utils.ts`
+`ThemeToggle` đang dùng cơ chế hydration-safe để tránh mismatch giữa SSR và client render.
 
-## 7. AI Agent Rules
+## 7. Current usage map
 
-1. Mọi thay đổi token phải cập nhật [apps/web/app/globals.css](/home/thaikpham/Documents/Sony-wiki/sony-wiki/apps/web/app/globals.css) và tài liệu này cùng lúc.
-2. Khi migrate từ `sony-wiki-ref`, remap về semantic token mới, không bê nguyên style cũ.
-3. Nếu feature cần token mới, thêm vào semantic layer trước rồi mới dùng ở component.
-4. Nếu chỉ sửa component nhỏ, ưu tiên tái sử dụng token hiện có thay vì tạo token mới không cần thiết.
-5. Không đổi sang theme khác nếu chưa cập nhật docs và xác nhận dark-mode sync vẫn hoạt động.
-6. Nếu gặp xung đột giữa theme registry và HeroUI khiến chữ/nền không đủ tương phản, ưu tiên sửa để đọc được trước rồi mới tối ưu hóa lại token chung.
+Những vùng đang dựa trực tiếp vào token layer này:
 
-*Phiên bản: 2.3*
-*Cập nhật cuối: 09/04/2026*
+- `TopNavigation`
+- `GlobalSearch`
+- `AuthSlot`
+- `ThemeToggle`
+- `ClientLayout`
+- `/`
+- `/wiki`
+- `/wiki/[slug]`
+- `/color-lab`
+- toàn bộ modal/admin workspace của `Wiki` và `Color Lab`
+
+## 8. Compatibility notes
+
+Alias `--color-*` vẫn còn cần thiết vì repo chưa hoàn tất migrate toàn bộ UI sang semantic token trực tiếp.
+
+Quy tắc:
+
+- component mới: dùng semantic token trước
+- component cũ đang được chạm tới: remap dần khỏi alias
+- không thêm palette rời mới trong component nếu chưa chuẩn hóa vào token layer
+
+## 9. UI library rules
+
+1. HeroUI v3 là UI layer mặc định cho app shell và phần lớn controls.
+2. shadcn trong repo chủ yếu đóng vai trò bridge theme và primitive support.
+3. Với HeroUI, ưu tiên `onPress` thay vì `onClick` khi component hỗ trợ.
+4. Khi HeroUI variant mặc định không đủ tương phản, được phép override bằng semantic token ở mức component.
+5. Không dùng raw màu rải rác trong component khi một token tương đương đã tồn tại.
+
+## 10. Maintenance rules
+
+1. Mọi thay đổi token phải cập nhật [apps/web/app/globals.css](/home/thaikpham/Documents/Sony-wiki/sony-wiki/apps/web/app/globals.css) và file này cùng lúc.
+2. Khi đổi visual direction, mô tả lại token authority và theme behavior thay vì chỉ thay ảnh chụp hoặc link theme.
+3. Khi migrate từ legacy, remap style cũ về semantic token mới; không bê nguyên palette legacy sang runtime mới.
+4. Nếu thêm token mới, đặt tên theo mục đích sử dụng chứ không đặt theo màu.
+
+*Phiên bản: 3.0*
+*Cập nhật cuối: 10/04/2026*

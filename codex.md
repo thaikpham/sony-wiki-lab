@@ -1,8 +1,8 @@
 # Sony Wiki — Codex
 
-Tài liệu này là bộ quy chuẩn cho runtime hiện tại trong `sony-wiki/apps/web`. Mọi thay đổi code, page, component và migration mới nên bám tài liệu này trước khi mở rộng `wiki` hoặc `color-lab`.
+Tài liệu này là working protocol cho runtime hiện tại trong `apps/web`. Mục tiêu của nó là giúp mọi lần đọc code, sửa code và cập nhật docs bám đúng source of truth đang có thật.
 
-## 1. Runtime hiện tại
+## 1. Runtime snapshot
 
 ### Stack đang dùng thật
 
@@ -10,21 +10,24 @@ Tài liệu này là bộ quy chuẩn cho runtime hiện tại trong `sony-wiki/
 | --- | --- |
 | Framework | Next.js 16 App Router |
 | Language | TypeScript strict |
-| Styling | Tailwind CSS v4 |
 | UI Library | HeroUI v3 |
-| Theme Registry | shadcn + TweakCN theme `cmnr4nnqp000304kv7jxh4ag3` |
-| Backend | Supabase |
+| Styling | Tailwind CSS v4 + shadcn theme bridge |
+| Data | Supabase |
+| Forms | React Hook Form + Zod |
 | Motion | Lenis + GSAP |
+| Client state | Zustand |
 | Font | Noto Sans |
+| Monorepo orchestration | Turborepo |
 
 ### Boundary
 
-- `sony-wiki/apps/web`: runtime chính
-- `sony-wiki/docs`: docs dự án và rollout notes
-- `sony-wiki/_bmad`: workflow/planning framework
-- `sony-wiki-ref/sony-wiki-dev`: legacy reference, không phải nơi phát triển mới
+- `apps/web`: runtime chính
+- `docs`: project knowledge / rollout docs
+- `_bmad-output`: artifacts mô tả current state, decisions và next stories
+- `_bmad`: framework BMAD, không phải runtime sản phẩm
+- `../sony-wiki-ref/sony-wiki-dev`: legacy reference only
 
-## 2. Những gì đã có trong web
+## 2. Những gì đang có trong web
 
 ### App shell
 
@@ -38,161 +41,139 @@ Tài liệu này là bộ quy chuẩn cho runtime hiện tại trong `sony-wiki/
 
 ### Routes
 
-- `/`: placeholder homepage
-- `/wiki`: route động theo `searchParams`, hiện mới hiển thị query state + placeholder
-- `/wiki/[slug]`: detail page đọc dữ liệu từ Supabase
-- `/color-lab`: placeholder Phase 3
-- `/api/search`: global search cho products và categories
+- `/`
+- `/wiki`
+- `/wiki/[slug]`
+- `/color-lab`
 
-### Data layer
+### API routes
 
-- `apps/web/lib/supabase/client.ts`
-- `apps/web/lib/supabase/server.ts`
-- `apps/web/lib/supabase/migrations/20260408_wiki_schema.sql`
-- `apps/web/lib/supabase/migrations/20260409_wiki_search_indexes.sql`
+- `/api/search`
+- `/api/wiki/admin/verify`
+- `/api/wiki/admin/catalog`
+- `/api/wiki/categories`
+- `/api/wiki/categories/[id]`
+- `/api/wiki/products`
+- `/api/wiki/products/[id]`
+- `/api/color-lab/admin/catalog`
+- `/api/color-lab/recipes`
+- `/api/color-lab/recipes/[id]`
+- `/api/color-lab/photos`
+- `/api/color-lab/photos/[id]`
 
-### Theme layer
+### Domain boundaries
 
-- `apps/web/components.json`
-- `apps/web/app/globals.css`
-- theme registry đang dùng:
-  - `https://tweakcn.com/r/themes/cmnr4nnqp000304kv7jxh4ag3`
-- shadcn đã được init ở `apps/web`
-- dark mode phải đồng bộ cả:
-  - `html[color-scheme="light|dark"]`
-  - class `.dark` trên `document.documentElement`
-- `ThemeToggle` phải render hydration-safe
-- navigation hiện tại dùng thêm component-level contrast overrides trên:
-  - `TopNavigation`
-  - `GlobalSearch`
-  - `AuthSlot`
-  - `ThemeToggle`
+- `components/layout/*`: app shell và top-level interactions
+- `components/wiki/*`: listing, detail helpers, compare UI, admin workspace
+- `components/color-lab/*`: recipe library, preview, picture profile panel, admin workspace
+- `lib/wiki/*`: typed contracts, mappers, queries, compare helpers, admin validation/auth
+- `lib/color-lab/*`: typed contracts, mock data, mappers, queries, admin helpers
+- `lib/supabase/*`: public, browser, server và admin clients
+- `types/*`: shared contracts
 
-## 3. Cấu trúc thư mục khuyến nghị
+## 3. Runtime behavior rules
 
-```text
-apps/web/
-├── app/                # routes, layout, globals, api
-├── components/
-│   ├── layout/         # app shell, navigation, search, auth shell
-│   ├── scroll/         # smooth scroll + scroll top helpers
-│   ├── wiki/           # tạo khi listing/detail/admin bắt đầu tách component thật
-│   ├── color-lab/      # tạo khi Phase 3 bắt đầu
-│   └── shared/         # shared presentational primitives nếu cần
-├── lib/
-│   └── supabase/       # client, server, migrations, service helpers
-└── types/              # shared typings
-```
+### Public reads
 
-Nếu `components/wiki`, `components/color-lab` hoặc `components/shared` chưa tồn tại thì chỉ tạo khi có feature thực, không tạo trước để giữ repo gọn.
+- public data nên đi qua typed query layer trong `lib/wiki/queries.ts` hoặc `lib/color-lab/queries.ts`
+- public read dùng `createPublicClient()`
+- server pages dùng `withTimeout(...)` để giữ failure mode rõ ràng
+- `Color Lab` có fallback mock data nếu Supabase chưa có dữ liệu
 
-## 4. Thiết kế hệ thống
+### Admin writes
 
-### Colors
+- admin flow hiện chưa dùng auth user/session thật
+- cả `Wiki` và `Color Lab` đều dùng chung `WIKI_ADMIN_PASSWORD`
+- client side xác thực qua `/api/wiki/admin/verify`
+- secret được giữ trong `sessionStorage` bằng `sony-wiki-admin-secret`
+- mutation routes dùng `createAdminClient()` với `SUPABASE_SERVICE_ROLE_KEY`
 
-- Luôn ưu tiên semantic tokens trong [design_tokens.md](./design_tokens.md).
-- Không thêm raw color vào component nếu chưa được chuẩn hóa.
-- Alias `--color-*` chỉ là lớp tương thích cho phần đang migrate.
-- Theme nền hiện tại là monochrome theme từ TweakCN; khi đổi theme phải cập nhật cả docs và `globals.css`.
-- Nếu HeroUI variant không cho đủ tương phản với theme hiện tại, được phép override màu ở mức component cho các vùng critical như navigation/search.
+### Search & compare
 
-### Typography
+- global search trả về hai loại kết quả: `product`, `category`
+- `/wiki` parse route state qua helper `parseWikiSearchParams`
+- compare queue giới hạn tối đa 4 sản phẩm
+- compare state được giữ trong query string
 
-- Font chính là `Noto Sans`.
-- Heading cần rõ ràng, đậm và gọn.
-- Body text ưu tiên `sm` đến `base`.
-- Nội dung tiếng Việt cần line-height thoáng, tránh block chữ dày.
+## 4. Design and UI rules
 
-### Layout
+1. Ưu tiên semantic token trong [design_tokens.md](./design_tokens.md).
+2. HeroUI v3 là UI layer mặc định; shadcn là lớp support/theming.
+3. App shell hiện tại là top-navigation-only; không quay lại drawer/sidebar làm mặc định nếu chưa có lý do rõ.
+4. Auth hiện chỉ là shell; không giả định repo đã có login flow hoàn chỉnh.
+5. Theme mode phải luôn đồng bộ `localStorage`, `html[color-scheme]` và class `.dark`.
 
-- Mobile-first.
-- App shell hiện tại là top-navigation-only, không còn sidebar/drawer là chuẩn chính.
-- Feature mới chỉ nên mở rộng trong vùng `<main>` của `ClientLayout`.
+## 5. Data and schema rules
 
-## 5. Component Rules
+### Wiki
 
-### Naming
+- schema gốc: `20260408_wiki_schema.sql`
+- search indexes: `20260409_wiki_search_indexes.sql`
+- runtime fields bổ sung: `20260410_wiki_product_runtime_fields.sql`
+- normalized domain types:
+  - `WikiCategory`
+  - `WikiSpecEntry`
+  - `WikiSpecGroup`
+  - `WikiProductListItem`
+  - `WikiProductDetail`
 
-- File: `PascalCase.tsx`
-- Component: `PascalCase`
-- Variables: `camelCase`
-- Types: `PascalCase`
+### Color Lab
 
-### UI Strategy
+- schema gốc: `20260409_color_lab_schema.sql`
+- normalized domain types:
+  - `ColorLabRecipe`
+  - `ColorLabRecipeSettings`
+  - `ColorLabPhoto`
 
-- Ưu tiên HeroUI trước khi tự viết primitive mới.
-- Chỉ thêm wrapper khi có lý do rõ ràng về domain hoặc consistency.
-- Repo hiện hỗ trợ cả shadcn, nhưng HeroUI vẫn là UI layer mặc định cho app shell hiện có.
-- shadcn chủ yếu được dùng để quản lý theme registry và sẵn sàng cho `components/ui/*` khi cần.
-- HeroUI v3-only:
-  - dùng `@heroui/react` + `@heroui/styles`
-  - không dùng pattern v2 như `HeroUIProvider` từ `@heroui/system`
-  - ưu tiên `onPress` trên HeroUI components
-- App shell chuẩn hiện tại:
-  - `TopNavigation`
-  - `GlobalSearch`
-  - `AuthSlot`
-  - `ThemeToggle`
-- Với app shell hiện tại, khả năng đọc được luôn ưu tiên hơn việc bám tuyệt đối vào variant mặc định của HeroUI.
+## 6. Migration rules
 
-### Motion
+Khi đọc từ `../sony-wiki-ref/sony-wiki-dev`:
 
-- Chỉ dùng animation để cải thiện cảm nhận điều hướng hoặc trạng thái.
-- Motion hiện có trong repo là Lenis + GSAP; Framer Motion có dependency nhưng chưa là shell mặc định.
-- Không thêm animation dày đặc vào CRUD, bảng dữ liệu hoặc form quản trị.
+1. Chỉ lấy business rule, content model, data field và flow thật sự cần.
+2. Không copy nguyên file hoặc nguyên kiến trúc.
+3. Tái cấu trúc theo boundary mới trong `apps/web`.
+4. Nếu hành vi legacy vẫn cần giữ, ghi nó vào docs hoặc planning artifacts.
 
-## 6. Data & Feature Strategy
+## 7. Verification rules
 
-### Supabase
+### Local gates
 
-- Detail page `/wiki/[slug]` đang đọc trực tiếp từ bảng `wiki_products`.
-- Search API đang đọc từ:
-  - `wiki_products`
-  - `wiki_categories`
-- Public read hiện dựa trên `is_published = true` cho products.
+- `npm run test`
+- `npm run typecheck`
+- `npm run lint`
+- `npm run build`
 
-### Fetching
+### CI note
 
-- Ưu tiên Server Components cho dữ liệu đọc.
-- Dùng Client Components cho search, theme toggle, local state và tương tác UI.
-- Loading, empty state và error state phải được định nghĩa rõ.
+GitHub Actions hiện mới chạy:
 
-## 7. Migration Rules
+- `npm ci`
+- `npm run build --if-present`
+- `npm test`
 
-Khi migrate từ `sony-wiki-ref/sony-wiki-dev`:
+Không giả định CI đã thay local `lint` và `typecheck`.
 
-1. Đọc flow cũ để hiểu feature và business rule.
-2. Tách business logic, data fields và hành vi cần giữ lại.
-3. Ánh xạ sang kiến trúc `apps/web`.
-4. Chuẩn hóa lại UI theo token mới.
-5. Không copy nguyên module cũ nếu nó kéo theo cấu trúc legacy.
+## 8. BMAD working memory
 
-## 8. BMAD Working Memory
+Mặc định mỗi lần làm việc trong repo này:
 
-Đây là phần cần được xem như mặc định cho mỗi lần coding trong repo này:
+1. `Observe`
+   - đọc route, component, query layer, migration và docs liên quan
+2. `Classify`
+   - xác định vertical nào bị tác động: shell, wiki, color-lab, docs, infra
+3. `Constrain`
+   - xác định source of truth và ranh giới legacy
+4. `Implement`
+   - ưu tiên thay đổi nhỏ, có thể verify
+5. `Verify`
+   - chạy gate phù hợp với phạm vi đổi
+6. `Sync docs`
+   - nếu runtime, API surface, schema, token hoặc phase thay đổi thì cập nhật docs và `_bmad-output`
 
-1. Bắt đầu bằng `observe`:
-   - đọc route, component, migration và docs liên quan trước khi sửa
-2. Xác định `phase`:
-   - Foundation đã xong
-   - Wiki đang ở Phase 2, đã có schema + search + detail
-   - Color Lab vẫn ở Phase 3 placeholder
-3. Xác định `delta`:
-   - ghi rõ phần nào đang có thật
-   - ghi rõ phần nào còn placeholder hoặc chưa nối backend
-4. Implement theo `small verified increments`:
-   - sửa ít nhưng đúng
-   - chạy `lint` và `build` khi thay đổi có ảnh hưởng runtime
-5. Đồng bộ `code + docs`:
-   - nếu route, shell, phase, schema hoặc token thay đổi thì cập nhật docs cùng lượt
-   - nếu theme registry đổi, cập nhật cả `README.md`, `design_tokens.md` và tài liệu này
-6. Tôn trọng `source of truth`:
-   - `apps/web` và tài liệu trong repo mới luôn ưu tiên hơn legacy reference
+## 9. AI partner protocol
 
-## 9. AI Agent Protocol
-
-1. Đọc `README.md`, `design_tokens.md`, `project_report.md` và `docs/repository_structure.md` trước khi mở rộng feature.
-2. Xem `sony-wiki/apps/web` là runtime chính.
-3. Chỉ dùng `sony-wiki-ref` như tài liệu đầu vào cho migration.
-4. Mọi planning artifact nên bám luồng BMAD trong `_bmad`.
-5. Khi có thay đổi về cấu trúc, phase hoặc hành vi runtime, cập nhật docs song song với code.
+1. Đọc [docs/index.md](./docs/index.md) trước khi sửa lớn.
+2. Xem `apps/web` là runtime duy nhất để triển khai.
+3. Chỉ dùng legacy repo làm reference.
+4. Khi current state đổi, cập nhật ít nhất `README.md`, `project_report.md` và doc liên quan trong `docs/`.
+5. Không chỉnh `_bmad` chỉ để phản ánh trạng thái dự án; nếu cần context planning, cập nhật `_bmad-output` trước.

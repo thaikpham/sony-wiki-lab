@@ -12,7 +12,12 @@
     "dev": "turbo run dev --filter=web --ui=stream",
     "build": "turbo run build --filter=web --ui=stream",
     "start": "turbo run start --filter=web --ui=stream",
-    "lint": "turbo run lint --filter=web --ui=stream"
+    "lint": "turbo run lint --filter=web --ui=stream",
+    "typecheck": "turbo run typecheck --filter=web --ui=stream",
+    "test": "turbo run test --filter=web --ui=stream",
+    "test:e2e": "turbo run test:e2e --filter=web --ui=stream",
+    "wiki:import:legacy": "node --experimental-strip-types ./scripts/wiki-import-legacy.ts",
+    "smoke:photobooth": "bash ./scripts/photobooth-smoke.sh"
   },
   "devDependencies": {
     "baseline-browser-mapping": "^2.10.16",
