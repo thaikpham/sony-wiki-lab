@@ -1,6 +1,6 @@
 use libloading::{Library, Symbol};
 use serde::{Deserialize, Serialize};
-use std::ffi::{CStr, CString, c_char, c_int, c_void};
+use std::ffi::{c_char, c_int, c_void, CStr, CString};
 use std::path::Path;
 use std::sync::{Arc, Mutex};
 use thiserror::Error;
@@ -306,8 +306,9 @@ impl SdkBridge {
     pub fn connect_first_camera(&self) -> Result<(), BridgeError> {
         let lib = self.library.lock().unwrap();
         let func: Symbol<PbConnectFirstCamera> = unsafe {
-            lib.get(b"pb_connect_first_camera")
-                .map_err(|e| BridgeError::SymbolNotFound(format!("pb_connect_first_camera: {}", e)))?
+            lib.get(b"pb_connect_first_camera").map_err(|e| {
+                BridgeError::SymbolNotFound(format!("pb_connect_first_camera: {}", e))
+            })?
         };
 
         let result = unsafe { func() };
@@ -378,8 +379,9 @@ impl SdkBridge {
     pub fn capture_single_frame(&self) -> Result<(), BridgeError> {
         let lib = self.library.lock().unwrap();
         let func: Symbol<PbCaptureSingleFrame> = unsafe {
-            lib.get(b"pb_capture_single_frame")
-                .map_err(|e| BridgeError::SymbolNotFound(format!("pb_capture_single_frame: {}", e)))?
+            lib.get(b"pb_capture_single_frame").map_err(|e| {
+                BridgeError::SymbolNotFound(format!("pb_capture_single_frame: {}", e))
+            })?
         };
 
         let result = unsafe { func() };
@@ -421,8 +423,9 @@ impl SdkBridge {
     pub fn get_last_capture_result(&self) -> Result<PbCaptureResult, BridgeError> {
         let lib = self.library.lock().unwrap();
         let func: Symbol<PbGetLastCaptureResult> = unsafe {
-            lib.get(b"pb_get_last_capture_result")
-                .map_err(|e| BridgeError::SymbolNotFound(format!("pb_get_last_capture_result: {}", e)))?
+            lib.get(b"pb_get_last_capture_result").map_err(|e| {
+                BridgeError::SymbolNotFound(format!("pb_get_last_capture_result: {}", e))
+            })?
         };
 
         let mut result: PbCaptureResult = unsafe { std::mem::zeroed() };
@@ -534,8 +537,9 @@ impl SdkBridge {
     pub fn get_live_view_frame(&self, buffer: &mut [u8]) -> Result<usize, BridgeError> {
         let lib = self.library.lock().unwrap();
         let func: Symbol<PbGetLiveViewFrameCopy> = unsafe {
-            lib.get(b"pb_get_live_view_frame_copy")
-                .map_err(|e| BridgeError::SymbolNotFound(format!("pb_get_live_view_frame_copy: {}", e)))?
+            lib.get(b"pb_get_live_view_frame_copy").map_err(|e| {
+                BridgeError::SymbolNotFound(format!("pb_get_live_view_frame_copy: {}", e))
+            })?
         };
 
         let mut out_size: usize = 0;
@@ -553,8 +557,9 @@ impl SdkBridge {
     pub fn get_camera_settings(&self) -> Result<PbCameraSettings, BridgeError> {
         let lib = self.library.lock().unwrap();
         let func: Symbol<PbGetCameraSettings> = unsafe {
-            lib.get(b"pb_get_camera_settings")
-                .map_err(|e| BridgeError::SymbolNotFound(format!("pb_get_camera_settings: {}", e)))?
+            lib.get(b"pb_get_camera_settings").map_err(|e| {
+                BridgeError::SymbolNotFound(format!("pb_get_camera_settings: {}", e))
+            })?
         };
 
         let mut settings: PbCameraSettings = unsafe { std::mem::zeroed() };
@@ -700,9 +705,7 @@ unsafe fn c_string_to_string(ptr: *const c_char) -> String {
         return String::new();
     }
 
-    CStr::from_ptr(ptr)
-        .to_string_lossy()
-        .into_owned()
+    CStr::from_ptr(ptr).to_string_lossy().into_owned()
 }
 
 /// Safe wrapper for converting C string pointer to Rust String
@@ -711,9 +714,7 @@ unsafe fn c_ptr_to_string(ptr: *const c_char) -> String {
         return String::new();
     }
 
-    CStr::from_ptr(ptr)
-        .to_string_lossy()
-        .into_owned()
+    CStr::from_ptr(ptr).to_string_lossy().into_owned()
 }
 
 #[cfg(test)]

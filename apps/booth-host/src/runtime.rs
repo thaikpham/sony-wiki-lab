@@ -20,9 +20,16 @@ pub struct BoothRuntime {
 
 impl Default for BoothRuntime {
     fn default() -> Self {
+        let storage_path = if cfg!(target_os = "windows") {
+            "D:/SonyPhotobooth/captures".to_string()
+        } else {
+            let home = std::env::var("HOME").unwrap_or_else(|_| "/tmp".to_string());
+            format!("{}/SonyPhotobooth/captures", home)
+        };
+
         Self {
             state: BoothState::Idle,
-            storage_path: "D:/SonyPhotobooth/captures".to_string(),
+            storage_path,
         }
     }
 }

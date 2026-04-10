@@ -17,7 +17,8 @@ Kết luận hiện tại:
 - Repo đã vượt qua giai đoạn foundation.
 - `Wiki` đã là vertical hoạt động được với read flow, compare flow và admin CRUD.
 - `Color Lab` đã lên mức internal-production: live data path, structured compatibility, storage-backed preview gallery và operator-ready admin workflow.
-- Điểm yếu còn lại nằm ở hardening, automation coverage, real auth và refinement của media/storage workflow.
+- `Photobooth` đã chuyển từ mock-backed demo shell sang host-first runtime shell ở web layer, nhưng Windows runtime verification vẫn còn mở.
+- Điểm yếu còn lại nằm ở hardening, automation coverage, real auth và verification của runtime media/local-host workflow.
 
 ## 2. Project classification
 
@@ -60,6 +61,19 @@ Kết luận hiện tại:
 - admin catalog + CRUD cho recipes/photos qua shared-password session cookie
 - recipe editor có compatibility fields và preset palette
 - photo manager dùng upload flow thật, metadata update và storage cleanup
+
+### Photobooth
+
+- routes `/photobooth`, `/photobooth/capture`, `/photobooth/gallery`, `/photobooth/review/[sessionId]`, `/photobooth/share/[sessionId]`
+- web layer không còn mock fallback mặc định cho runtime data
+- API semantics đã rõ:
+  - host unavailable => `503`
+  - missing session => `404`
+  - valid data => `200`
+- capture page là host-backed runtime entrypoint, không còn là snapshot mock mặc định
+- Node CI đã có smoke script cho photobooth
+- booth host Rust đã có session lifecycle, file watcher subscription, event fan-out, asset serving và live-view websocket ở mức code
+- Windows end-to-end verification với Sony SDK và bridge thật vẫn chưa được xác nhận
 
 ## 4. Phase assessment
 
@@ -116,6 +130,30 @@ Còn lại:
 - auth/role model mạnh hơn shared-password admin
 - deeper ops runbooks cho storage moderation/content lifecycle
 
+### Phase 4: Photobooth runtime
+
+Trạng thái: `host-first web complete, Windows runtime verification pending`
+
+Đã hoàn thành:
+
+- photobooth routes và API surface trong `apps/web`
+- unavailable/not-found semantics cho SSR pages và API routes
+- bỏ silent mock fallback khỏi runtime data layer
+- Node smoke coverage cho photobooth
+- Rust host refactor cho:
+  - `GET /sessions`
+  - `GET /sessions/:id/assets/:asset_id`
+  - capture path dùng file watcher subscription thật
+  - event websocket fan-out
+  - live-view websocket gửi binary frame
+
+Còn lại:
+
+- `cargo build` và `cargo test` pass trên máy Windows có compiler/linker đầy đủ
+- verify C++ bridge load và Sony SDK runtime proof
+- live view thật với camera
+- create session -> capture -> file detected -> asset registered -> review/share update
+
 ## 5. Risks and constraints
 
 ### Product/runtime risks
@@ -123,6 +161,8 @@ Còn lại:
 - auth thật chưa được nối; admin hiện dùng shared password pattern
 - browser automation chưa có cho shell, wiki hay color-lab
 - `Color Lab` vẫn có seed fallback cho trường hợp dataset trống hoặc source degraded, nên cần theo dõi load-state khi nghiệm thu
+- `Photobooth` Rust host chưa có build/test proof trên máy hiện tại vì Fedora local thiếu linker `cc`
+- Windows booth validation vẫn là gate chính trước khi gọi photobooth là production-ready v1
 
 ### Process risks
 
@@ -135,10 +175,11 @@ Còn lại:
 
 ## 6. Recommended next increments
 
-1. Bổ sung browser smoke coverage cho top navigation, search, wiki admin và color-lab admin.
-2. Mở browser smoke coverage cho lightbox, transfer guide, admin upload flow và cache revalidation của `Color Lab`.
-3. Thiết kế lại auth/admin story theo hướng role-based thay cho shared-password session cookie.
-4. Tiếp tục chuẩn hóa docs mapping giữa legacy behavior và runtime mới cho các vertical còn đang migrate.
+1. Chạy handover test của photobooth trên Windows booth machine và sửa toàn bộ lỗi host/bridge/runtime lộ ra.
+2. Bổ sung browser smoke coverage cho top navigation, search, wiki admin và color-lab admin.
+3. Mở browser smoke coverage cho lightbox, transfer guide, admin upload flow và cache revalidation của `Color Lab`.
+4. Thiết kế lại auth/admin story theo hướng role-based thay cho shared-password session cookie.
+5. Tiếp tục chuẩn hóa docs mapping giữa legacy behavior và runtime mới cho các vertical còn đang migrate.
 
 ## 7. Verification snapshot
 
@@ -160,6 +201,7 @@ Kết quả xác nhận cục bộ ngày `2026-04-10`:
 - `npm run typecheck`: pass
 - `npm run lint`: pass
 - `npm run build`: pass
+- `npm run smoke:photobooth`: pass
 
 ## 8. BMAD execution note
 
@@ -172,4 +214,4 @@ Chu trình chuẩn cho repo này:
 5. chỉ dùng legacy repo như input, không phải implementation target
 
 *Cập nhật: 10/04/2026*
-*Trạng thái tổng quan: Foundation hoàn tất, Wiki đã operational nhưng còn hardening, Color Lab đã đạt internal production và đang chuyển sang automation/auth hardening*
+*Trạng thái tổng quan: Foundation hoàn tất, Wiki đã operational nhưng còn hardening, Color Lab đã đạt internal production, Photobooth đã host-first ở web layer và đang chờ Windows runtime verification*

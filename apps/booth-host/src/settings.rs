@@ -139,6 +139,9 @@ impl Settings {
 
     /// Save settings to a TOML file
     pub fn save_to_file<P: AsRef<Path>>(&self, path: P) -> anyhow::Result<()> {
+        if let Some(parent) = path.as_ref().parent() {
+            std::fs::create_dir_all(parent)?;
+        }
         let content = toml::to_string_pretty(self)?;
         std::fs::write(path, content)?;
         Ok(())
@@ -261,7 +264,10 @@ impl Settings {
             }
         }
 
-        if let Some(value) = json.get("file_arrival_timeout_seconds").and_then(|v| v.as_u64()) {
+        if let Some(value) = json
+            .get("file_arrival_timeout_seconds")
+            .and_then(|v| v.as_u64())
+        {
             self.file_arrival_timeout_seconds = value;
         }
 

@@ -2,18 +2,18 @@ use axum::{
     extract::{Path, State, WebSocketUpgrade},
     http::{header, StatusCode},
     response::{IntoResponse, Json, Response},
-    routing::{get, post, patch},
+    routing::{get, post},
     Router,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::sync::Arc;
 use tokio::sync::{broadcast, RwLock};
-use tracing::{error, info, warn};
 use tower_http::cors::{Any, CorsLayer};
+use tracing::{error, info, warn};
 
-use crate::file_watcher::{FileDetectedEvent, FileWatcherManager};
-use crate::session_manager::{BoothMode, Session, SessionEvent, SessionManager, SessionState};
+use crate::file_watcher::FileWatcherManager;
+use crate::session_manager::{BoothMode, SessionEvent, SessionManager, SessionState};
 use crate::settings::Settings;
 
 /// Application state shared across handlers
@@ -102,12 +102,18 @@ pub fn create_router(state: Arc<AppState>) -> Router {
     Router::new()
         .route("/", get(root_handler))
         .route("/status", get(status_handler))
-        .route("/sessions", get(list_sessions_handler).post(create_session_handler))
+        .route(
+            "/sessions",
+            get(list_sessions_handler).post(create_session_handler),
+        )
         .route("/sessions/:id", get(get_session_handler))
         .route("/sessions/:id/capture", post(capture_handler))
         .route("/sessions/:id/reset", post(reset_session_handler))
         .route("/sessions/:id/assets/:asset_id", get(get_asset_handler))
-        .route("/settings", get(get_settings_handler).patch(update_settings_handler))
+        .route(
+            "/settings",
+            get(get_settings_handler).patch(update_settings_handler),
+        )
         .route("/ws/liveview", get(live_view_ws_handler))
         .route("/ws/events", get(events_ws_handler))
         .layer(
@@ -150,7 +156,10 @@ async fn status_handler(State(state): State<Arc<AppState>>) -> impl IntoResponse
         .filter(|s| s.state != SessionState::Published && s.state != SessionState::Error)
         .max_by_key(|s| s.created_at);
 
-    let camera_connected = matches!(bridge_status, crate::session_manager::SdkBridgeStatus::Connected);
+    let camera_connected = matches!(
+        bridge_status,
+        crate::session_manager::SdkBridgeStatus::Connected
+    );
 
     let current_session_id = current_session.as_ref().map(|s| s.id.clone());
 
@@ -181,12 +190,16 @@ async fn status_handler(State(state): State<Arc<AppState>>) -> impl IntoResponse
         capture_backend: match settings.sdk_capture_mode {
             crate::settings::SdkCaptureMode::Primary => "sdk-primary",
             crate::settings::SdkCaptureMode::FallbackOnly => "fallback-only",
-        }.to_string(),
-        fallback_capture_mode: settings.fallback_capture_mode.map(|m| match m {
-            crate::settings::FallbackCaptureMode::Hdmi => "hdmi",
-            crate::settings::FallbackCaptureMode::Remote => "remote",
-            crate::settings::FallbackCaptureMode::UsbStream => "usb-stream",
-        }.to_string()),
+        }
+        .to_string(),
+        fallback_capture_mode: settings.fallback_capture_mode.map(|m| {
+            match m {
+                crate::settings::FallbackCaptureMode::Hdmi => "hdmi",
+                crate::settings::FallbackCaptureMode::Remote => "remote",
+                crate::settings::FallbackCaptureMode::UsbStream => "usb-stream",
+            }
+            .to_string()
+        }),
         file_watcher_status: current_session
             .as_ref()
             .map(|session| match session.file_watch_status {
@@ -196,7 +209,11 @@ async fn status_handler(State(state): State<Arc<AppState>>) -> impl IntoResponse
                 crate::session_manager::FileWatchStatus::Timeout => "timeout",
                 crate::session_manager::FileWatchStatus::Error => "error",
             })
-            .unwrap_or(if settings.enable_file_watcher { "idle" } else { "error" })
+            .unwrap_or(if settings.enable_file_watcher {
+                "idle"
+            } else {
+                "error"
+            })
             .to_string(),
         file_watcher_root: settings.local_storage_root.clone(),
         file_arrival_timeout_seconds: settings.file_arrival_timeout_seconds,
@@ -229,7 +246,7 @@ async fn list_sessions_handler(State(state): State<Arc<AppState>>) -> impl IntoR
 async fn create_session_handler(
     State(state): State<Arc<AppState>>,
     Json(request): Json<CreateSessionRequest>,
-) -> impl IntoResponse {
+) -> Response {
     match state
         .session_manager
         .create_session(
@@ -249,10 +266,13 @@ async fn create_session_handler(
                 .start_watching(session_id.clone(), folder_path)
                 .await
             {
-                warn!("Failed to start file watching for session {}: {}", session_id, e);
+                warn!(
+                    "Failed to start file watching for session {}: {}",
+                    session_id, e
+                );
             }
 
-            (StatusCode::CREATED, Json(session))
+            (StatusCode::CREATED, Json(session)).into_response()
         }
         Err(e) => {
             error!("Failed to create session: {}", e);
@@ -260,6 +280,7 @@ async fn create_session_handler(
                 StatusCode::INTERNAL_SERVER_ERROR,
                 Json(json!({ "error": e.to_string() })),
             )
+                .into_response()
         }
     }
 }
@@ -268,13 +289,14 @@ async fn create_session_handler(
 async fn get_session_handler(
     State(state): State<Arc<AppState>>,
     Path(session_id): Path<String>,
-) -> impl IntoResponse {
+) -> Response {
     match state.session_manager.get_session(&session_id).await {
-        Some(session) => (StatusCode::OK, Json(session)),
+        Some(session) => (StatusCode::OK, Json(session)).into_response(),
         None => (
             StatusCode::NOT_FOUND,
             Json(json!({ "error": "Session not found" })),
-        ),
+        )
+            .into_response(),
     }
 }
 
@@ -283,7 +305,7 @@ async fn capture_handler(
     State(state): State<Arc<AppState>>,
     Path(session_id): Path<String>,
     Json(_request): Json<CaptureRequest>,
-) -> impl IntoResponse {
+) -> Response {
     let mut rx = state.file_watcher.subscribe();
 
     // Start capture
@@ -292,13 +314,14 @@ async fn capture_handler(
         .start_capture(&session_id, &mut rx)
         .await
     {
-        Ok(session) => (StatusCode::OK, Json(session)),
+        Ok(session) => (StatusCode::OK, Json(session)).into_response(),
         Err(e) => {
             error!("Capture failed for session {}: {}", session_id, e);
             (
                 StatusCode::INTERNAL_SERVER_ERROR,
                 Json(json!({ "error": e.to_string() })),
             )
+                .into_response()
         }
     }
 }
@@ -318,12 +341,16 @@ async fn get_asset_handler(
             )
         })?;
 
-    let asset = session.assets.iter().find(|asset| asset.id == asset_id).ok_or_else(|| {
-        (
-            StatusCode::NOT_FOUND,
-            Json(json!({ "error": "Asset not found" })),
-        )
-    })?;
+    let asset = session
+        .assets
+        .iter()
+        .find(|asset| asset.id == asset_id)
+        .ok_or_else(|| {
+            (
+                StatusCode::NOT_FOUND,
+                Json(json!({ "error": "Asset not found" })),
+            )
+        })?;
 
     let bytes = tokio::fs::read(&asset.file_path).await.map_err(|e| {
         (
@@ -338,26 +365,23 @@ async fn get_asset_handler(
         "image/jpeg"
     };
 
-    Ok((
-        [(header::CONTENT_TYPE, content_type)],
-        bytes,
-    )
-        .into_response())
+    Ok(([(header::CONTENT_TYPE, content_type)], bytes).into_response())
 }
 
 /// Reset session handler
 async fn reset_session_handler(
     State(state): State<Arc<AppState>>,
     Path(session_id): Path<String>,
-) -> impl IntoResponse {
+) -> Response {
     match state.session_manager.reset_session(&session_id).await {
-        Ok(session) => (StatusCode::OK, Json(session)),
+        Ok(session) => (StatusCode::OK, Json(session)).into_response(),
         Err(e) => {
             error!("Failed to reset session {}: {}", session_id, e);
             (
                 StatusCode::INTERNAL_SERVER_ERROR,
                 Json(json!({ "error": e.to_string() })),
             )
+                .into_response()
         }
     }
 }
@@ -372,7 +396,7 @@ async fn get_settings_handler(State(state): State<Arc<AppState>>) -> impl IntoRe
 async fn update_settings_handler(
     State(state): State<Arc<AppState>>,
     Json(request): Json<UpdateSettingsRequest>,
-) -> impl IntoResponse {
+) -> Response {
     let mut settings = state.settings.write().await;
 
     // Convert request to JSON and update
@@ -382,7 +406,8 @@ async fn update_settings_handler(
             return (
                 StatusCode::BAD_REQUEST,
                 Json(json!({ "error": e.to_string() })),
-            );
+            )
+                .into_response();
         }
     };
 
@@ -390,16 +415,25 @@ async fn update_settings_handler(
         return (
             StatusCode::BAD_REQUEST,
             Json(json!({ "error": e.to_string() })),
-        );
+        )
+            .into_response();
     }
+
+    let updated_settings = settings.clone();
 
     // Save to file
     let config_path = Settings::default_config_path();
-    if let Err(e) = settings.save_to_file(&config_path) {
+    if let Err(e) = updated_settings.save_to_file(&config_path) {
         warn!("Failed to save settings: {}", e);
     }
 
-    (StatusCode::OK, Json(json!(settings.clone())))
+    drop(settings);
+    state
+        .session_manager
+        .update_settings(updated_settings.clone())
+        .await;
+
+    (StatusCode::OK, Json(json!(updated_settings))).into_response()
 }
 
 /// Live view WebSocket handler
@@ -411,10 +445,7 @@ async fn live_view_ws_handler(
 }
 
 /// Handle live view WebSocket connection
-async fn handle_live_view_ws(
-    mut socket: axum::extract::ws::WebSocket,
-    state: Arc<AppState>,
-) {
+async fn handle_live_view_ws(mut socket: axum::extract::ws::WebSocket, state: Arc<AppState>) {
     info!("Live view WebSocket connected");
 
     loop {
@@ -452,10 +483,7 @@ async fn events_ws_handler(
 }
 
 /// Handle events WebSocket connection
-async fn handle_events_ws(
-    mut socket: axum::extract::ws::WebSocket,
-    state: Arc<AppState>,
-) {
+async fn handle_events_ws(mut socket: axum::extract::ws::WebSocket, state: Arc<AppState>) {
     info!("Events WebSocket connected");
 
     let mut rx = state.event_sender.subscribe();
@@ -463,40 +491,45 @@ async fn handle_events_ws(
     let asset_base_url = format!("http://{}:{}", settings.bind_address, settings.port);
     drop(settings);
 
-    let forward_task = tokio::spawn(async move {
-        while let Ok(event) = rx.recv().await {
-            let json = serialize_ws_event(&event, &asset_base_url);
-            if socket
-                .send(axum::extract::ws::Message::Text(json))
-                .await
-                .is_err()
-            {
-                break;
+    loop {
+        tokio::select! {
+            event = rx.recv() => {
+                match event {
+                    Ok(event) => {
+                        let json = serialize_ws_event(&event, &asset_base_url);
+                        if socket
+                            .send(axum::extract::ws::Message::Text(json.into()))
+                            .await
+                            .is_err()
+                        {
+                            break;
+                        }
+                    }
+                    Err(broadcast::error::RecvError::Lagged(skipped)) => {
+                        warn!("Events WebSocket lagged, skipped {} event(s)", skipped);
+                    }
+                    Err(broadcast::error::RecvError::Closed) => break,
+                }
+            }
+            msg = socket.recv() => {
+                match msg {
+                    Some(Ok(axum::extract::ws::Message::Close(_))) => break,
+                    Some(Ok(_)) => {}
+                    Some(Err(_)) | None => break,
+                }
             }
         }
-    });
-
-    // Keep connection alive and handle incoming messages
-    while let Some(msg) = socket.recv().await {
-        if msg.is_err() {
-            break;
-        }
-
-        // Handle ping/pong or other client messages
-        match msg.unwrap() {
-            axum::extract::ws::Message::Close(_) => break,
-            _ => {}
-        }
     }
-
-    let _ = forward_task.await;
 
     info!("Events WebSocket disconnected");
 }
 
 fn serialize_ws_event(event: &SessionEvent, asset_base_url: &str) -> String {
     let json = match event {
-        SessionEvent::CaptureStarted { session_id, timestamp } => json!({
+        SessionEvent::CaptureStarted {
+            session_id,
+            timestamp,
+        } => json!({
             "type": "capture_started",
             "timestamp": timestamp,
             "sessionId": session_id,
@@ -514,7 +547,10 @@ fn serialize_ws_event(event: &SessionEvent, asset_base_url: &str) -> String {
                 "seconds_remaining": seconds_remaining
             }
         }),
-        SessionEvent::ShutterTriggered { session_id, timestamp } => json!({
+        SessionEvent::ShutterTriggered {
+            session_id,
+            timestamp,
+        } => json!({
             "type": "shutter_triggered",
             "timestamp": timestamp,
             "sessionId": session_id,
@@ -568,7 +604,10 @@ fn serialize_ws_event(event: &SessionEvent, asset_base_url: &str) -> String {
                 "error": error
             }
         }),
-        SessionEvent::CaptureTimeout { session_id, timestamp } => json!({
+        SessionEvent::CaptureTimeout {
+            session_id,
+            timestamp,
+        } => json!({
             "type": "capture_timeout",
             "timestamp": timestamp,
             "sessionId": session_id,

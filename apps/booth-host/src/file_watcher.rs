@@ -83,7 +83,8 @@ impl FileWatcherManager {
                 "Session {} is already being watched, stopping previous watch",
                 session_id
             );
-            self.stop_watching_internal(&session_id, &mut sessions).await;
+            self.stop_watching_internal(&session_id, &mut sessions)
+                .await;
         }
 
         sessions.insert(
@@ -124,7 +125,10 @@ impl FileWatcherManager {
 
         if let Some(ref mut watcher) = *watcher_guard {
             watcher.watch(&path, RecursiveMode::NonRecursive)?;
-            info!("Started watching session {} at path: {:?}", session_id, path);
+            info!(
+                "Started watching session {} at path: {:?}",
+                session_id, path
+            );
         }
 
         self.scan_existing_files(&session_id, &path).await?;
@@ -245,41 +249,68 @@ async fn handle_file_event(
     _debounce: Duration,
 ) {
     for path in event.paths {
-        let sessions_guard = sessions.read().await;
+        let matching_sessions: Vec<String> = {
+            let sessions_guard = sessions.read().await;
+            sessions_guard
+                .iter()
+                .filter(|(_, state)| path.starts_with(&state.watched_path))
+                .map(|(session_id, _)| session_id.clone())
+                .collect()
+        };
 
-        for (session_id, state) in sessions_guard.iter() {
-            if path.starts_with(&state.watched_path) {
-                if let Ok(metadata) = tokio::fs::metadata(&path).await {
-                    if metadata.is_file() {
-                        let file_name = path
-                            .file_name()
-                            .map(|n| n.to_string_lossy().to_string())
-                            .unwrap_or_default();
-                        let file_path = path.to_string_lossy().to_string();
-                        let extension = path
-                            .extension()
-                            .map(|e| e.to_string_lossy().to_lowercase())
-                            .unwrap_or_default();
+        if matching_sessions.is_empty() {
+            continue;
+        }
 
-                        if is_supported_image_extension(&extension) {
-                            let event = FileDetectedEvent {
-                                session_id: session_id.clone(),
-                                file_name: file_name.clone(),
-                                file_path: file_path.clone(),
-                                file_size: metadata.len(),
-                                detected_at: chrono::Utc::now().to_rfc3339(),
-                            };
+        let Ok(metadata) = tokio::fs::metadata(&path).await else {
+            continue;
+        };
 
-                            let _ = sender.send(event);
-                            info!(
-                                "File detected: {} in session {} ({} bytes)",
-                                file_name,
-                                session_id,
-                                metadata.len()
-                            );
-                        }
-                    }
+        if !metadata.is_file() {
+            continue;
+        }
+
+        let file_name = path
+            .file_name()
+            .map(|n| n.to_string_lossy().to_string())
+            .unwrap_or_default();
+        let file_path = path.to_string_lossy().to_string();
+        let extension = path
+            .extension()
+            .map(|e| e.to_string_lossy().to_lowercase())
+            .unwrap_or_default();
+
+        if !is_supported_image_extension(&extension) {
+            continue;
+        }
+
+        let mut sessions_guard = sessions.write().await;
+        for session_id in matching_sessions {
+            let mut should_emit = false;
+
+            if let Some(state) = sessions_guard.get_mut(&session_id) {
+                if !state.detected_files.contains(&file_name) {
+                    state.detected_files.push(file_name.clone());
+                    should_emit = true;
                 }
+            }
+
+            if should_emit {
+                let event = FileDetectedEvent {
+                    session_id: session_id.clone(),
+                    file_name: file_name.clone(),
+                    file_path: file_path.clone(),
+                    file_size: metadata.len(),
+                    detected_at: chrono::Utc::now().to_rfc3339(),
+                };
+
+                let _ = sender.send(event);
+                info!(
+                    "File detected: {} in session {} ({} bytes)",
+                    file_name,
+                    session_id,
+                    metadata.len()
+                );
             }
         }
     }

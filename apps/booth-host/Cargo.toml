@@ -16,7 +16,7 @@ tower-http = { version = "0.6", features = ["cors", "fs", "trace"] }
 tokio-tungstenite = "0.26"
 
 # File system watching
-notify = { version = "6.1", default-features = false, features = ["macos_kqueue"] }
+notify = "6.1"
 
 # FFI for loading C++ bridge
 libloading = "0.8"

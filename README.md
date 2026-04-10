@@ -1,6 +1,6 @@
 # Sony Wiki
 
-Sony Wiki là repo làm việc chính cho runtime mới của dự án. Đây là monorepo dùng Turborepo, hiện có một ứng dụng triển khai thật tại `apps/web`, đồng thời đã bắt đầu scaffold local runtime cho `Photobooth` tại `apps/booth-host` và `apps/booth-bridge`.
+Sony Wiki là repo làm việc chính cho runtime mới của dự án. Đây là monorepo dùng Turborepo, hiện có một ứng dụng triển khai thật tại `apps/web`, đồng thời đang phát triển local runtime cho `Photobooth` tại `apps/booth-host` và `apps/booth-bridge`.
 
 ## BMAD Entry Point
 
@@ -15,8 +15,8 @@ Nếu cần nắm dự án nhanh theo workflow BMAD, đọc theo thứ tự:
 ## Repository Role
 
 - `apps/web`: runtime Next.js 16 App Router đang được phát triển thật.
-- `apps/booth-host`: scaffold Rust local runtime cho Photobooth trên Windows.
-- `apps/booth-bridge`: scaffold C/C++ shim cho Sony Camera Remote SDK.
+- `apps/booth-host`: Rust local runtime cho Photobooth, target chính là Windows booth machine.
+- `apps/booth-bridge`: C/C++ shim cho Sony Camera Remote SDK.
 - `docs`: lớp `project_knowledge` của repo, dùng để giữ current state, structure notes và rollout checklists.
 - `_bmad`: BMAD framework, skills, workflows và templates.
 - `_bmad-output`: planning artifacts và implementation artifacts sinh ra trong quá trình làm việc theo BMAD.
@@ -28,7 +28,7 @@ Repo hiện là một monorepo đơn giản:
 
 - root orchestration bằng `turbo`
 - một app chính là `apps/web`
-- runtime local scaffold cho Photobooth tại `apps/booth-host` và `apps/booth-bridge`
+- runtime local cho Photobooth tại `apps/booth-host` và `apps/booth-bridge`
 - chưa có package workspace runtime nào trong `packages/*`
 
 `apps/web` hiện được tổ chức theo bốn lát cắt chính:
@@ -91,12 +91,17 @@ Repo hiện là một monorepo đơn giản:
 - route `/photobooth/share/[sessionId]`
 - landing page có Windows download CTA và setup checklist
 - capture UI có kiosk flow, operator gate và QR preview
-- gallery UI và public share route dùng mock data local-first
+- web runtime đã chuyển sang host-first semantics, không còn silent fallback sang mock data mặc định
+- gallery, review và share pages phân biệt rõ `host unavailable` với `session not found`
+- photobooth smoke script đã có trong CI Node workflow
 - public routes:
   - `/api/photobooth/releases/latest`
   - `/api/photobooth/gallery`
   - `/api/photobooth/public/session/[sessionId]`
   - `/api/photobooth/share/[sessionId]`
+- local runtime companion:
+  - `apps/booth-host` đã có session lifecycle, asset serving, event websocket và live-view binary path ở mức code
+  - `apps/booth-bridge` vẫn là SDK boundary riêng cho Sony Camera Remote SDK
 
 ## Tech stack thực tế
 
@@ -187,7 +192,8 @@ Verification gate tại repo hiện được hiểu như sau:
 
 - local quality gates: `test`, `typecheck`, `lint`, `build`
 - CI hiện có tại `.github/workflows/node.js.yml`
-- CI đang chạy `npm ci`, `npm run build --if-present` và `npm test` trên Node `18.x`, `20.x`, `22.x`
+- CI đang chạy `npm ci`, `npm run build --if-present`, `npm test` và photobooth smoke trên Node `18.x`, `20.x`, `22.x`
+- Rust host có workflow riêng tại `.github/workflows/rust-booth-host.yml`
 
 Điều này có nghĩa là `lint` và `typecheck` hiện vẫn là gate nên chạy thủ công trước khi chốt thay đổi quan trọng.
 
@@ -199,6 +205,13 @@ Verification gate tại repo hiện được hiểu như sau:
 - `npm run typecheck`: pass
 - `npm run lint`: pass
 - `npm run build`: pass
+- `npm run smoke:photobooth`: pass
+
+Riêng `apps/booth-host`:
+
+- local Fedora hiện đã có `cargo` và `rustc`
+- `cargo build/test` vẫn bị chặn do máy thiếu linker host `cc`
+- lượt test tiếp theo nên chạy trên Windows booth machine; xem handover tại `docs/photobooth_windows_handover.md`
 
 `next build` cũng xác nhận lại route surface:
 

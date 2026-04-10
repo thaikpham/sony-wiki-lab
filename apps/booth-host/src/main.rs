@@ -27,13 +27,19 @@ async fn main() -> anyhow::Result<()> {
 
     // Load settings
     let settings = Settings::load_or_default();
-    info!("Settings loaded: storage_root={}", settings.local_storage_root);
+    info!(
+        "Settings loaded: storage_root={}",
+        settings.local_storage_root
+    );
 
     // Create channels for events
     let (session_event_tx, _) = broadcast::channel(100);
 
     // Create session manager
-    let session_manager = Arc::new(SessionManager::new(settings.clone(), session_event_tx.clone()));
+    let session_manager = Arc::new(SessionManager::new(
+        settings.clone(),
+        session_event_tx.clone(),
+    ));
 
     // Create file watcher
     let file_watcher = Arc::new(FileWatcherManager::new());
@@ -98,14 +104,18 @@ async fn main() -> anyhow::Result<()> {
                 .handle_detected_file(&session_id, file_event)
                 .await
             {
-                warn!("Failed to handle detected file for session {}: {}", session_id, e);
+                warn!(
+                    "Failed to handle detected file for session {}: {}",
+                    session_id, e
+                );
             }
         }
     });
 
     // Spawn session event logger task
+    let session_event_logger_tx = session_event_tx.clone();
     tokio::spawn(async move {
-        let mut session_event_rx = session_event_tx.subscribe();
+        let mut session_event_rx = session_event_logger_tx.subscribe();
         while let Ok(event) = session_event_rx.recv().await {
             info!("Session event: {:?}", event);
         }

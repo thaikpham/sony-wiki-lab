@@ -1,6 +1,6 @@
 use crate::file_watcher::FileDetectedEvent;
+use crate::sdk_bridge::SdkBridge;
 use crate::settings::{FallbackCaptureMode, SdkCaptureMode, Settings};
-use crate::sdk_bridge::{PbCameraInfo, PbCameraSettings, SdkBridge};
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -8,7 +8,7 @@ use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::{broadcast, mpsc, RwLock};
-use tracing::{debug, error, info, warn};
+use tracing::{error, info, warn};
 use uuid::Uuid;
 
 /// Session state
@@ -190,7 +190,10 @@ impl SessionManager {
         // Create the session folder
         tokio::fs::create_dir_all(&folder_path).await?;
 
-        let title = format!("Session {}", session_id.split('-').next().unwrap_or(&session_id));
+        let title = format!(
+            "Session {}",
+            session_id.split('-').next().unwrap_or(&session_id)
+        );
         let now = Utc::now();
 
         let session = Session {
@@ -219,14 +222,12 @@ impl SessionManager {
         info!("Created session {} for event '{}'", session_id, event_name);
 
         // Emit state change event
-        let _ = self
-            .event_sender
-            .try_send(SessionEvent::StateChanged {
-                session_id: session_id.clone(),
-                old_state: SessionState::Idle,
-                new_state: SessionState::Ready,
-                timestamp: Utc::now(),
-            });
+        let _ = self.event_sender.try_send(SessionEvent::StateChanged {
+            session_id: session_id.clone(),
+            old_state: SessionState::Idle,
+            new_state: SessionState::Ready,
+            timestamp: Utc::now(),
+        });
 
         Ok(session)
     }
@@ -241,6 +242,11 @@ impl SessionManager {
     pub async fn get_all_sessions(&self) -> Vec<Session> {
         let sessions = self.sessions.read().await;
         sessions.values().cloned().collect()
+    }
+
+    pub async fn update_settings(&self, settings: Settings) {
+        let mut guard = self.settings.write().await;
+        *guard = settings;
     }
 
     /// Delete a session
@@ -302,7 +308,8 @@ impl SessionManager {
         if let Err(e) = capture_result {
             error!("Capture failed for session {}: {}", session_id, e);
             session.error_message = Some(e.to_string());
-            self.transition_state(&mut session, SessionState::Error).await?;
+            self.transition_state(&mut session, SessionState::Error)
+                .await?;
 
             let _ = self.event_sender.try_send(SessionEvent::CaptureFailed {
                 session_id: session_id.to_string(),
@@ -338,58 +345,23 @@ impl SessionManager {
 
         match file_result {
             Some(file_event) => {
-                // File detected - process it
                 info!(
                     "File detected for session {}: {}",
                     session_id, file_event.file_name
                 );
-
-                session.file_watch_status = FileWatchStatus::FileDetected;
-                session.detected_files.push(file_event.file_name.clone());
-                session.latest_asset_file_name = Some(file_event.file_name.clone());
-
-                // Emit file detected event
-                let _ = self.event_sender.try_send(SessionEvent::FileDetected {
-                    session_id: session_id.to_string(),
-                    file_name: file_event.file_name.clone(),
-                    file_path: file_event.file_path.clone(),
-                    file_size: file_event.file_size,
-                    timestamp: Utc::now(),
-                });
-
-                // Create asset (with placeholder dimensions - would read actual image in production)
-                let asset = Asset {
-                    id: Uuid::new_v4().to_string(),
-                    file_name: file_event.file_name.clone(),
-                    file_path: file_event.file_path.clone(),
-                    width: 0, // Would read from image
-                    height: 0, // Would read from image
-                    file_size: file_event.file_size,
-                    captured_at: Utc::now(),
-                };
-
-                session.assets.push(asset.clone());
-                session.selected_asset_id = Some(asset.id.clone());
-
-                // Emit asset registered event
-                let _ = self.event_sender.try_send(SessionEvent::AssetRegistered {
-                    session_id: session_id.to_string(),
-                    asset: asset.clone(),
-                    timestamp: Utc::now(),
-                });
-
-                // Transition to review
-                self.transition_state(&mut session, SessionState::Review)
-                    .await?;
+                self.handle_detected_file(session_id, file_event).await?;
+                session = self
+                    .get_session(session_id)
+                    .await
+                    .ok_or_else(|| anyhow::anyhow!("Session disappeared during capture"))?;
             }
             None => {
                 // Timeout - no file detected
                 warn!("File detection timeout for session {}", session_id);
 
                 session.file_watch_status = FileWatchStatus::Timeout;
-                session.error_message = Some(
-                    "File detection timeout - image may not have been saved".to_string(),
-                );
+                session.error_message =
+                    Some("File detection timeout - image may not have been saved".to_string());
 
                 // Emit timeout event
                 let _ = self.event_sender.try_send(SessionEvent::CaptureTimeout {
@@ -411,11 +383,7 @@ impl SessionManager {
     }
 
     /// Trigger the actual capture via SDK or fallback
-    async fn trigger_capture(
-        &self,
-        session: &Session,
-        settings: &Settings,
-    ) -> anyhow::Result<()> {
+    async fn trigger_capture(&self, session: &Session, settings: &Settings) -> anyhow::Result<()> {
         match settings.sdk_capture_mode {
             SdkCaptureMode::Primary => {
                 // Try SDK first
@@ -454,10 +422,7 @@ impl SessionManager {
     }
 
     /// Trigger fallback capture (mock implementation)
-    async fn trigger_fallback_capture(
-        &self,
-        _mode: FallbackCaptureMode,
-    ) -> anyhow::Result<()> {
+    async fn trigger_fallback_capture(&self, _mode: FallbackCaptureMode) -> anyhow::Result<()> {
         // In a real implementation, this would trigger screen capture
         // from the specified fallback source (HDMI, Remote, USB Stream)
         // For now, we just simulate a delay
@@ -540,6 +505,7 @@ impl SessionManager {
 
         if let Some(session) = sessions.get_mut(session_id) {
             if !session.detected_files.contains(&file_event.file_name) {
+                let old_state = session.state;
                 session.detected_files.push(file_event.file_name.clone());
                 session.latest_asset_file_name = Some(file_event.file_name.clone());
 
@@ -555,6 +521,7 @@ impl SessionManager {
                 };
 
                 session.assets.push(asset.clone());
+                session.selected_asset_id = Some(asset.id.clone());
 
                 // Update state if capturing
                 if session.state == SessionState::Capturing {
@@ -578,6 +545,15 @@ impl SessionManager {
                     asset,
                     timestamp: Utc::now(),
                 });
+
+                if old_state != session.state {
+                    let _ = self.event_sender.try_send(SessionEvent::StateChanged {
+                        session_id: session_id.to_string(),
+                        old_state,
+                        new_state: session.state,
+                        timestamp: Utc::now(),
+                    });
+                }
             }
         }
 
